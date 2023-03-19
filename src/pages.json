@@ -1,16 +1,111 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"pages": [
 		{
-			"path": "pages/index/index",
+			"path": "pages/home/home",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "河小帆"
+			}
+		},
+		{
+			"path": "pages/mine/mine",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/creativeLesson/creativeLesson",
+			"style": {
+				"navigationBarTitleText": "创意教案"
+			}
+		},
+		{
+			"path": "pages/makeAStory/makeAStory",
+			"style": {
+				"navigationBarTitleText": "编个故事"
+			}
+		},
+		{
+			"path": "pages/classroomGame/classroomGame",
+			"style": {
+				"navigationBarTitleText": "课堂游戏"
+			}
+		},
+		{
+			"path": "pages/speak/speak",
+			"style": {
+				"navigationBarTitleText": "讲话发言"
+			}
+		},
+		{
+			"path": "pages/familyActivities/familyActivities",
+			"style": {
+				"navigationBarTitleText": "亲子活动"
+			}
+		},
+		{
+			"path": "pages/communicationMethod/communicationMethod",
+			"style": {
+				"navigationBarTitleText": "沟通方法"
+			}
+		},
+		{
+			"path": "pages/englishScene/englishScene",
+			"style": {
+				"navigationBarTitleText": "英文场景"
+			}
+		},
+		{
+			"path": "pages/trainingProgram/trainingProgram",
+			"style": {
+				"navigationBarTitleText": "培训方案"
+			}
+		},
+		{
+			"path": "pages/plan/plan",
+			"style": {
+				"navigationBarTitleText": "生成方案"
+			}
+		},
+		{
+			"path": "pages/contactUs/contactUs",
+			"style": {
+				"navigationBarTitleText": "联系我们"
+			}
+		},
+		{
+			"path": "pages/leaveUsMessage/leaveUsMessage",
+			"style": {
+				"navigationBarTitleText": "给我们留言"
+			}
+		},
+		{
+			"path": "pages/increase/increase",
+			"style": {
+				"navigationBarTitleText": "增加次数"
 			}
 		}
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "河小帆",
+		"navigationBarBackgroundColor": "#748C7C",
+		"backgroundColor": "#E8E8E8"
+	},
+	"tabBar": {
+		"color": "#ffffff",
+		"selectedColor": "#ffffff",
+		"borderStyle": "white",
+		"backgroundColor": "#748C7C",
+		"list": [{
+			"pagePath": "pages/home/home",
+			"iconPath": "static/image/icon_home.png",
+			"selectedIconPath": "static/image/icon_home.png",
+			"text": "首页"
+		}, {
+			"pagePath": "pages/mine/mine",
+			"iconPath": "static/image/icon_people.png",
+			"selectedIconPath": "static/image/icon_people.png",
+			"text": "我的"
+		}]
 	}
 }
