@@ -5,7 +5,7 @@
 			<view class="result-main">{{ content }}</view>
 		</view>
     <view class="plan-btns">
-      <view class="btn-item" @click="">复制结果</view>
+      <view class="btn-item" @click="copyContent">复制结果</view>
       <view class="btn-item item-disabled" v-if="isEn">转换成英文</view>
       <view class="btn-item" v-else @click="translateEnglish">{{ translateEn ? '转换成中文' : '转换成英文' }}</view>
     </view>
@@ -30,6 +30,11 @@
 			this.postScenesChat(query)
 		},
 		methods: {
+			copyContent () {
+				uni.setClipboardData({
+					data: this.content
+				})
+			},
 			postScenesChat () {
 				api.postScenesChat().then(res => {
 					console.log(res)
