@@ -1,4 +1,4 @@
-const HOST = 'https://platform.apecar.cn'
+const HOST = 'https://greatchat.lanhejiaoyu.net'
 
 uni.addInterceptor('request', {
   // invoke(args) {
@@ -25,17 +25,17 @@ const payload = (url, params, access) => {
     header: {}
   }
 
-  // // 是否需要登录权限
-  // if (access) {
-  //   try {
-  //     let token = wx.getStorageSync('token')
+  // 是否需要登录权限
+  if (access) {
+    try {
+      let token = wx.getStorageSync('token')
 
-  //     if (token) {
-  //       payload.header['X-Access-Token'] = token
-  //     }
-  //   } catch (error) {
-  //   }
-  // }
+      if (token) {
+        payload.header['Authorization'] = 'Bearer ' + token
+      }
+    } catch (error) {
+    }
+  }
   return payload
 }
 

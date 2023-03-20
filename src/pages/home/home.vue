@@ -14,7 +14,6 @@
 </template>
 
 <script>
-	import { api } from '../../api'
 	export default {
 		data() {
 			return {
@@ -54,9 +53,6 @@
 			}
 		},
 		onLoad() {
-			// api.login().then(res => {
-			// 	console.log(res)
-			// })
 		},
 		methods: {
 			goContactUs () {

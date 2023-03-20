@@ -1,13 +1,40 @@
 <script>
+	import { api } from './api'
 	export default {
 		onLaunch: function() {
-			console.log('App Launch')
+			this.addInterceptor()
+			this.login()
 		},
 		onShow: function() {
 			console.log('App Show')
 		},
 		onHide: function() {
 			console.log('App Hide')
+		},
+		methods: {
+			addInterceptor () {
+				uni.addInterceptor('showLoading', {
+					invoke (arg) {
+						arg.title = arg.title || '加载中...'
+						if (arg.mask === undefined) {
+							arg.mask = true
+						}
+					}
+				})
+			},
+			login () {
+				// #ifdef MP-WEIXIN
+				uni.login({
+					success: (code) => {
+						api.login({
+							code: code
+						}).then(res => {
+							console.log(res)
+						})
+					}
+				})
+				// #endif
+			}
 		}
 	}
 </script>

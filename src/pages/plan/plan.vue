@@ -2,27 +2,55 @@
 	<view class="plan-page">
     <view class="plan-title">以下结果仅供参口，请根据自身情况适当调整</view>
     <view class="plan-result">
-			<view class="result-main"></view>
+			<view class="result-main">{{ content }}</view>
 		</view>
     <view class="plan-btns">
-      <view class="btn-item">复制结果</view>
-      <view class="btn-item">转换成英文</view>
+      <view class="btn-item" @click="">复制结果</view>
+      <view class="btn-item item-disabled" v-if="isEn">转换成英文</view>
+      <view class="btn-item" v-else @click="translateEnglish">{{ translateEn ? '转换成中文' : '转换成英文' }}</view>
     </view>
 	</view>
 </template>
 
 <script>
+	import { api } from '../../api'
 	export default {
 		data() {
 			return {
+				isEn: false,
+				en_content: '',
+				zh_content: '',
+				content: '',
+				translateEn: false
 			}
 		},
 		onLoad(option){
-			// console.log(decodeURIComponent(option.query))
-			// const query = JSON.parse(decodeURIComponent(option.query))
-			// console.log(query)
+			const query = JSON.parse(decodeURIComponent(option.query))
+			this.isEn = !!query.isEn
+			this.postScenesChat(query)
 		},
 		methods: {
+			postScenesChat () {
+				api.postScenesChat().then(res => {
+					console.log(res)
+					// this.content = res.data.content
+				})
+			},
+			translateEnglish () {
+				if (this.translateEn) {
+					this.zh_content = this.content
+					uni.showLoading()
+					api.postScenesTranslate().then(res => {
+						console.log(res)
+						this.content = res.data.content
+						this.en_content = res.data.content
+						uni.hideLoading()
+					})
+				} else {
+					this.content = this.zh_content
+				}
+				this.translateEn = !this.translateEn
+			}
 		}
 	}
 </script>
@@ -61,6 +89,10 @@
 			&:last-of-type{
 				margin-right: 0;
 			}
+		}
+		.item-disabled{
+			color: #c0c4cc;
+			background: #ebeef5;
 		}
 	}
 }

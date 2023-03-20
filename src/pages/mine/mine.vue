@@ -26,6 +26,7 @@
 </template>
 
 <script>
+	import { api } from '../../api'
 	export default {
 		data() {
 			return {
@@ -36,6 +37,7 @@
 			}
 		},
 		onLoad() {
+			this.getQuotaRemaining()
 			// uni.getUserProfile({
 			// 	success: (res) => {
 			// 		console.log(res)
@@ -51,6 +53,11 @@
 			// })
 		},
 		methods: {
+			getQuotaRemaining () {
+				api.getQuotaRemaining().then(res => {
+					console.log(res)
+				})
+			},
 			goContactUs () {
 				uni.navigateTo({
 					url: `/pages/contactUs/contactUs`

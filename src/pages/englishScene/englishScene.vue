@@ -81,6 +81,7 @@
         const query = {
           sceneId: this.sceneId,
           radioId: this.radioId,
+          isEn: true
         }
         uni.navigateTo({
           url: `/pages/plan/plan?query=${encodeURIComponent(JSON.stringify(query))}`
