@@ -33,57 +33,58 @@
 		data() {
 			return {
 				venueList: [{
-					value: 1,
+					value: '幼儿园内',
           name: '幼儿园内',
 				}, {
-					value: 2,
+					value: '幼儿园外',
           name: '幼儿园外',
 				}],
         sceneList: [{
-          value: 1,
+          value: '1',
           name: '1小时左右',
         }, {
-          value: 2,
+          value: '2',
           name: '2小时左右'
         }, {
-          value: 3,
+          value: '3',
           name: '3小时左右'
         }, {
-          value: 4,
+          value: '4',
           name: '4小时左右'
         }, {
-          value: 5,
+          value: '5',
           name: '5小时左右'
         }, {
-          value: 6,
+          value: '6',
           name: '6小时左右'
         }, {
-          value: 7,
+          value: '7',
           name: '7小时左右'
         }, {
-          value: 8,
+          value: '8',
           name: '8小时左右'
         }],
         radioList: [{
-          value: 1,
+          value: '2-3',
           name: '2-3岁'
         }, {
-          value: 2,
+          value: '3-4',
           name: '3-4岁'
         }, {
-          value: 3,
+          value: '4-5',
           name: '4-5岁'
         }, {
-          value: 4,
+          value: '5-6',
           name: '5-6岁'
         }],
         sceneId: '',
         radioId: '',
-        venueId: ''
+        venueId: '',
+        sceneKey: ''
 			}
 		},
-		onLoad() {
-
+		onLoad(option) {
+      this.sceneKey = option.key
 		},
 		methods: {
       sceneChange (val) {
@@ -96,10 +97,35 @@
         this.venueId = val
       },
       submit () {
+        if (!this.radioId) {
+          uni.showToast({
+            icon: 'error',
+            title: '请选择年龄段'
+          })
+          return false
+        }
+        if (!this.venueId) {
+          uni.showToast({
+            icon: 'error',
+            title: '请选择活动场地'
+          })
+          return false
+        }
         const query = {
-          sceneId: this.sceneId,
-          radioId: this.radioId,
-          venueId: this.venueId
+          sceneKey: this.sceneKey,
+          fields: [{
+            name: 'duration',
+            inputType: 'RADIO',
+            values: [this.sceneId]
+          }, {
+            name: 'ages',
+            inputType: 'RADIO',
+            values: [this.radioId]
+          }, {
+            name: 'where',
+            inputType: 'RADIO',
+            values: [this.venueId]
+          }],
         }
         uni.navigateTo({
           url: `/pages/plan/plan?query=${encodeURIComponent(JSON.stringify(query))}`

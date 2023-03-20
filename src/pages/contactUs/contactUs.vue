@@ -9,7 +9,7 @@
 		<view class="plan-title">客服微信号</view>
 		<view class="plan-wechat">lanhekeji007</view>
 		<view class="copy-btn">
-			<view class="btn-main">点击复制</view>
+			<view class="btn-main" @click="copy">点击复制</view>
 		</view>
 	</view>
 </template>
@@ -24,6 +24,11 @@
 		onLoad() {
 		},
 		methods: {
+			copy () {
+				uni.setClipboardData({
+					data: 'lanhekeji007'
+				})
+			}
 		}
 	}
 </script>

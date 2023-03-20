@@ -35,50 +35,51 @@
 		data() {
 			return {
         checkboxList: [{
-          value: 1,
+          value: '语言表达',
           name: '语言表达',
         }, {
-          value: 2,
+          value: '逻辑思维',
           name: '逻辑思维'
         }, {
-          value: 3,
+          value: '艺术表现',
           name: '艺术表现'
         }, {
-          value: 4,
+          value: '科学探索',
           name: '科学探索'
         }, {
-          value: 5,
+          value: '社会协作',
           name: '社会协作'
         }, {
-          value: 6,
+          value: '观察能力',
           name: '观察能力'
         }, {
-          value: 7,
+          value: '运动协调',
           name: '运动协调'
         }, {
-          value: 8,
+          value: '批判思维',
           name: '批判思维'
         }],
         radioList: [{
-          value: 1,
+          value: '2-3',
           name: '2-3岁'
         }, {
-          value: 2,
+          value: '3-4',
           name: '3-4岁'
         }, {
-          value: 3,
+          value: '4-5',
           name: '4-5岁'
         }, {
-          value: 4,
+          value: '5-6',
           name: '5-6岁'
         }],
         input: '',
         checkIds: [],
-        radioId: ''
+        radioId: '',
+        sceneKey: ''
 			}
 		},
-		onLoad() {
-
+		onLoad(option) {
+      this.sceneKey = option.key
 		},
 		methods: {
       checkboxChange (val) {
@@ -88,10 +89,28 @@
         this.radioId = val
       },
       submit () {
+        if (!this.radioId) {
+          uni.showToast({
+            icon: 'error',
+            title: '请选择年龄段'
+          })
+          return false
+        }
         const query = {
-          checkIds: this.radioId,
-          radioId: this.radioId,
-          input: ''
+          sceneKey: this.sceneKey,
+          fields: [{
+            name: 'ages',
+            inputType: 'RADIO',
+            values: [this.radioId]
+          }, {
+            name: 'field',
+            inputType: 'CHECK',
+            values: this.checkIds
+          }, {
+            name: 'subject',
+            inputType: 'SENTENCE',
+            values: [this.input]
+          }],
         }
         uni.navigateTo({
           url: `/pages/plan/plan?query=${encodeURIComponent(JSON.stringify(query))}`

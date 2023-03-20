@@ -20,7 +20,7 @@
 				isEn: false,
 				en_content: '',
 				zh_content: '',
-				content: '',
+				content: '你是谁',
 				translateEn: false
 			}
 		},
@@ -35,17 +35,29 @@
 					data: this.content
 				})
 			},
-			postScenesChat () {
-				api.postScenesChat().then(res => {
-					console.log(res)
-					// this.content = res.data.content
-				})
+			postScenesChat (query) {
+				console.log(query)
+				// uni.showLoading()
+				// api.postScenesChat(query).then(event => {
+				// 	uni.hideLoading()
+				// 	console.log('event', event)
+				// 	// const data = JSON.parse(event.data)
+				// 	// console.log(data)
+				// 	// /scenes/chat
+				// 	// console.log(res)
+				// 	// this.content = res.data.content
+				// }).catch(() => {
+				// 	uni.hideLoading()
+				// })
 			},
 			translateEnglish () {
-				if (this.translateEn) {
+				if (!this.translateEn) {
 					this.zh_content = this.content
+					console.log(this.content)
 					uni.showLoading()
-					api.postScenesTranslate().then(res => {
+					api.postScenesTranslate({
+						content: this.content
+					}).then(res => {
 						console.log(res)
 						this.content = res.data.content
 						this.en_content = res.data.content

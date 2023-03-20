@@ -26,43 +26,44 @@
 		data() {
 			return {
         sceneList: [{
-          value: 1,
-          name: '鼓舞士气',
+          value: '鼓舞士气',
+          name: '鼓舞士气'
         }, {
-          value: 2,
+          value: '产生共情',
           name: '产生共情'
         }, {
-          value: 3,
+          value: '总结成绩',
           name: '总结成绩'
         }, {
-          value: 4,
+          value: '展望未来',
           name: '展望未来'
         }, {
-          value: 5,
+          value: '展示专业',
           name: '展示专业'
         }, {
-          value: 6,
+          value: '改革制度',
           name: '改革制度'
         }],
         radioList: [{
-          value: 1,
+          value: '开家长会',
           name: '开家长会'
         }, {
-          value: 2,
+          value: '开学典礼',
           name: '开学典礼'
         }, {
-          value: 3,
+          value: '学期总结',
           name: '学期总结'
         }, {
-          value: 4,
+          value: '员工大会',
           name: '员工大会'
         }],
+        sceneKey: '',
         sceneId: '',
         radioId: ''
 			}
 		},
-		onLoad() {
-
+		onLoad(option) {
+      this.sceneKey = option.key
 		},
 		methods: {
       sceneChange (val) {
@@ -72,9 +73,24 @@
         this.radioId = val
       },
       submit () {
+        if (!this.radioId) {
+          uni.showToast({
+            icon: 'error',
+            title: '请选择发言场合'
+          })
+          return false
+        }
         const query = {
-          sceneId: this.sceneId,
-          radioId: this.radioId,
+          sceneKey: this.sceneKey,
+          fields: [{
+            name: 'occasion',
+            inputType: 'RADIO',
+            values: [this.radioId]
+          }, {
+            name: 'focus',
+            inputType: 'RADIO',
+            values: [this.sceneId]
+          }],
         }
         uni.navigateTo({
           url: `/pages/plan/plan?query=${encodeURIComponent(JSON.stringify(query))}`

@@ -10,7 +10,7 @@
 			<view class="operate-item">
 				<image class="item-icon" src="../../static/image/icon_count.png" mode="aspectFit"></image>
 				<text class="operate-text">剩余次数</text>
-				<text class="operate-number">8</text>
+				<text class="operate-number">{{ data && data.totalQuota ? data.totalQuota : 0 }}</text>
 				<view class="add-count-btn" @click="goIncrease">增加次数</view>
 			</view>
 			<view class="operate-item" @click="goContactUs">
@@ -30,14 +30,16 @@
 	export default {
 		data() {
 			return {
+				data: null,
 				userInfo: {
 					avatarUrl: 'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132',
 					nickName: '微信用户'
 				}
 			}
 		},
-		onLoad() {
+		onShow() {
 			this.getQuotaRemaining()
+			// this.getUserInfo()
 			// uni.getUserProfile({
 			// 	success: (res) => {
 			// 		console.log(res)
@@ -53,9 +55,22 @@
 			// })
 		},
 		methods: {
+			getUserInfo (query) {
+				// api.getUserInfo({
+				// 	userId: 1,
+				// 	signature: '',
+				// 	rawData,
+				// 	encryptedData,
+				// 	iv: ''
+				// }).then(res => {
+				// 	console.log(res)
+				// })
+			},
 			getQuotaRemaining () {
 				api.getQuotaRemaining().then(res => {
-					console.log(res)
+					if (res.code === 'SUCCESS') {
+						this.data = res.data
+					}
 				})
 			},
 			goContactUs () {
@@ -74,13 +89,12 @@
 				})
 			},
 			getUserProfile() {
-			// 	uni.getUserProfile({
-			// 		desc: '用于完善会员资料',
-			// 		success: (res) => {
-			// 			console.log(res.userInfo.avatarUrl)
-			// 			console.log(res)
-			// 		}
-			// 	})
+				uni.getUserProfile({
+					desc: '用于完善会员资料',
+					success: (res) => {
+						this.getUserInfo(res)
+					}
+				})
 			},
 		}
 	}

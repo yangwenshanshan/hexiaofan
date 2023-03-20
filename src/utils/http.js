@@ -6,6 +6,11 @@ uni.addInterceptor('request', {
   returnValue(args) {
     return new Promise((resolve, reject) => {
       args.then(res => {
+        // console.log('拦截器', res)
+        // if (res.data.code !== 'SUCCESS') {
+        //   uni.showToast(res.data.msg)
+        // }
+        // console.log(res)
         resolve(res.data)
       })
     })
@@ -28,7 +33,7 @@ const payload = (url, params, access) => {
   // 是否需要登录权限
   if (access) {
     try {
-      let token = wx.getStorageSync('token')
+      let token = uni.getStorageSync('token')
 
       if (token) {
         payload.header['Authorization'] = 'Bearer ' + token

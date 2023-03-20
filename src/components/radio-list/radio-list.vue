@@ -34,7 +34,7 @@
 		},
 		methods: {
       radioChange (e) {
-        this.currentValue = parseInt(e.detail.value)
+        this.currentValue = e.detail.value
         this.$emit('change', this.currentValue)
       },
       initRadio () {

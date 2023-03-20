@@ -26,49 +26,49 @@
 		data() {
 			return {
         sceneList: [{
-          value: 1,
-          name: '平时教学',
+          value: '平时教学',
+          name: '平时教学'
         }, {
-          value: 2,
+          value: '家长互动',
           name: '家长互动'
         }, {
-          value: 3,
+          value: '户外运动',
           name: '户外运动'
         }, {
-          value: 4,
+          value: '餐饮睡眠',
           name: '餐饮睡眠'
         }, {
-          value: 5,
+          value: '外教沟通',
           name: '外教沟通'
         }, {
-          value: 6,
+          value: '情绪安抚',
           name: '情绪安抚'
         }, {
-          value: 7,
+          value: '保健相关',
           name: '保健相关'
         }, {
-          value: 8,
+          value: '安全相关',
           name: '安全相关'
         }],
         radioList: [{
-          value: 1,
+          value: '2-3',
           name: '2-3岁'
         }, {
-          value: 2,
+          value: '3-4',
           name: '3-4岁'
         }, {
-          value: 3,
+          value: '4-5',
           name: '4-5岁'
         }, {
-          value: 4,
+          value: '5-6',
           name: '5-6岁'
         }],
         sceneId: '',
         radioId: ''
 			}
 		},
-		onLoad() {
-
+		onLoad(option) {
+      this.sceneKey = option.key
 		},
 		methods: {
       sceneChange (val) {
@@ -78,10 +78,24 @@
         this.radioId = val
       },
       submit () {
+        if (!this.radioId) {
+          uni.showToast({
+            icon: 'error',
+            title: '请选择年龄'
+          })
+          return false
+        }
         const query = {
-          sceneId: this.sceneId,
-          radioId: this.radioId,
-          isEn: true
+          sceneKey: this.sceneKey,
+          fields: [{
+            name: 'ages',
+            inputType: 'RADIO',
+            values: [this.radioId]
+          }, {
+            name: 'scene',
+            inputType: 'RADIO',
+            values: [this.sceneId]
+          }],
         }
         uni.navigateTo({
           url: `/pages/plan/plan?query=${encodeURIComponent(JSON.stringify(query))}`

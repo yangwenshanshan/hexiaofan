@@ -24,15 +24,21 @@
 			},
 			login () {
 				// #ifdef MP-WEIXIN
-				uni.login({
-					success: (code) => {
-						api.login({
-							code: code
-						}).then(res => {
-							console.log(res)
-						})
-					}
-				})
+				const token = uni.getStorageSync('token')
+				if (!token) {
+					uni.login({
+						success: (codeInfo) => {
+							api.login({
+								code: codeInfo.code
+							}).then(res => {
+								if (res.code === 'SUCCESS') {
+									uni.setStorageSync('token', res.data.token)
+									uni.setStorageSync('user', res.data.user)
+								}
+							})
+						}
+					})
+				}
 				// #endif
 			}
 		}

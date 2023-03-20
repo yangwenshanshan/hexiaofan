@@ -19,34 +19,42 @@
 			return {
 				titeList: [{
 					index: 1,
+					key: 'TSC01',
 					en_title: 'creativeLesson',
 					title: '创意教案'
 				}, {
 					index: 2,
+					key: 'TSC02',
 					en_title: 'makeAStory',
 					title: '编个故事'
 				}, {
 					index: 3,
+					key: 'TSC03',
 					en_title: 'classroomGame',
 					title: '课堂游戏'
 				}, {
 					index: 4,
+					key: 'TSC04',
 					en_title: 'speak',
 					title: '讲话发言'
 				}, {
 					index: 5,
+					key: 'TSC05',
 					en_title: 'familyActivities',
 					title: '亲子活动'
 				}, {
 					index: 6,
+					key: 'TSC06',
 					en_title: 'communicationMethod',
 					title: '沟通方法'
 				}, {
 					index: 7,
+					key: 'TSC07',
 					en_title: 'englishScene',
 					title: '英文场景'
 				}, {
 					index: 8,
+					key: 'TSC08',
 					en_title: 'trainingProgram',
 					title: '培训方案'
 				}]
@@ -62,7 +70,7 @@
 			},
 			goSubPage(item) {
 				uni.navigateTo({
-					url: `/pages/${item.en_title}/${item.en_title}`
+					url: `/pages/${item.en_title}/${item.en_title}?key=${item.key}`
 				})
 			}
 		}

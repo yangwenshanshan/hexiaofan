@@ -5,12 +5,13 @@
 			<view class="textarea-tip">{{ textValue.length }}/100</view>
 		</view>
 		<view class="plan-btn">
-			<view class="btn-main">提交</view>
+			<view class="btn-main" @click="submit">提交</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import { api } from '../../api'
 	export default {
 		data() {
 			return {
@@ -20,6 +21,37 @@
 		onLoad() {
 		},
 		methods: {
+			submit () {
+				if (!this.textValue) {
+					uni.showToast({
+						title: '请填写提交内容',
+						icon: 'none'
+					})
+					return
+				}
+				uni.showLoading({
+					title: '提交中...'
+				})
+				api.postLeaveMessage({
+					content: this.textValue
+				}).then(res => {
+					if (res.code === 'SUCCESS') {
+						uni.hideLoading()
+						uni.showToast({
+							title: '提交成功',
+							icon: 'none'
+						})
+						setTimeout(() => {
+							uni.navigateBack()
+						}, 1500)
+					}
+				}).catch(err => {
+					uni.hideLoading()
+					uni.showToast({
+						title: '提交失败',
+					})
+				})
+			}
 		}
 	}
 </script>

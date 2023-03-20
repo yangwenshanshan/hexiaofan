@@ -29,96 +29,96 @@
 				parentId: 0,
 				childrenId: 0,
         radioList: [{
-					value: 1,
+					value: '与家长沟通',
 					name: '与家长沟通',
 					children: [{
-						value: 11,
+						value: '肯定孩子表现',
 						name: '肯定孩子表现',
 					}, {
-						value: 12,
+						value: '反应孩子调皮',
 						name: '反应孩子调皮'
 					}, {
-						value: 13,
+						value: '促进家园合作',
 						name: '促进家园合作'
 					}, {
-						value: 14,
+						value: '提示按时出勤',
 						name: '提示按时出勤'
 					}]
 				}, {
-					value: 2,
+					value: '与孩子沟通',
 					name: '与孩子沟通',
 					children: [{
-						value: 21,
+						value: '表扬态度积极',
 						name: '表扬态度积极'
 					}, {
-						value: 22,
+						value: '鼓励多多发言',
 						name: '鼓励多多发言'
 					}, {
-						value: 23,
+						value: '强调团结互助',
 						name: '强调团结互助'
 					}, {
-						value: 24,
+						value: '提升文明程度',
 						name: '提升文明程度'
 					}]
 				}, {
-					value: 3,
+					value: '与领导沟通',
 					name: '与领导沟通',
 					children: [{
-						value: 31,
+						value: '说明工作繁重',
 						name: '说明工作繁重'
 					}, {
-						value: 32,
+						value: '提升自身能力',
 						name: '提升自身能力'
 					}, {
-						value: 33,
+						value: '传达涨薪诉求',
 						name: '传达涨薪诉求'
 					}, {
-						value: 34,
+						value: '协商离职事宜',
 						name: '协商离职事宜'
 					}]
 				}, {
-					value: 4,
+					value: '与下属沟通',
 					name: '与下属沟通',
 					children: [{
-						value: 41,
+						value: '肯定工作表现',
 						name: '肯定工作表现'
 					}, {
-						value: 42,
+						value: '传达不满意见',
 						name: '传达不满意见'
 					}, {
-						value: 43,
+						value: '提醒遵守制度',
 						name: '提醒遵守制度'
 					}, {
-						value: 44,
+						value: '通知解聘事宜',
 						name: '通知解聘事宜'
 					}]
 				}, {
-					value: 5,
+					value: '与同事沟通',
 					name: '与同事沟通',
 					children: [{
-						value: 51,
+						value: '解决矛盾冲突',
 						name: '解决矛盾冲突'
 					}, {
-						value: 52,
+						value: '安慰沮丧情绪',
 						name: '安慰沮丧情绪'
 					}]
 				}, {
-					value: 6,
+					value: '与外部机构沟通',
 					name: '与外部机构沟通',
 					children: [{
-						value: 61,
+						value: '招生引流合作',
 						name: '招生引流合作'
 					}]
 				}]
 			}
 		},
-		onLoad() {
-
+		onLoad(option) {
+			this.sceneKey = option.key
 		},
 		methods: {
 			parentChange (e) {
 				this.childrenId = ''
-				this.parentId = parseInt(e.detail.value)
+				this.parentId = e.detail.value
 				const component = this.$refs.radioList
 				for (let index = 0; index < component.length; index++) {
 					const element = component[index];
@@ -129,9 +129,31 @@
 				this.childrenId = val
 			},
 			submit () {
+        if (!this.parentId) {
+          uni.showToast({
+            icon: 'error',
+            title: '请选择大项'
+          })
+          return false
+        }
+        if (!this.childrenId) {
+          uni.showToast({
+            icon: 'error',
+            title: '请选择小项'
+          })
+          return false
+        }
         const query = {
-          childrenId: this.childrenId,
-          parentId: this.parentId
+          sceneKey: this.sceneKey,
+          fields: [{
+            name: 'purpose',
+            inputType: 'RADIO',
+            values: [this.parentId]
+          }, {
+            name: 'target',
+            inputType: 'RADIO',
+            values: [this.childrenId]
+          }],
         }
         uni.navigateTo({
           url: `/pages/plan/plan?query=${encodeURIComponent(JSON.stringify(query))}`

@@ -26,49 +26,50 @@
 		data() {
 			return {
         checkboxList: [{
-          value: 1,
-          name: '教育理论',
+          value: '教育理论',
+          name: '教育理论'
         }, {
-          value: 2,
+          value: '教学技巧',
           name: '教学技巧'
         }, {
-          value: 3,
+          value: '师德建设',
           name: '师德建设'
         }, {
-          value: 4,
+          value: '家长沟通',
           name: '家长沟通'
         }, {
-          value: 5,
+          value: '健康保健',
           name: '健康保健'
         }, {
-          value: 6,
+          value: '后勤安全',
           name: '后勤安全'
         }, {
-          value: 7,
+          value: '餐饮营养',
           name: '餐饮营养'
         }, {
-          value: 8,
+          value: '招生宣传',
           name: '招生宣传'
         }],
         radioList: [{
-          value: 1,
+          value: '毫无经验',
           name: '毫无经验'
         }, {
-          value: 2,
+          value: '略有经验',
           name: '略有经验'
         }, {
-          value: 3,
+          value: '较有经验',
           name: '较有经验'
         }, {
-          value: 4,
+          value: '富有经验',
           name: '富有经验'
         }],
         checkIds: [],
-        radioId: ''
+        radioId: '',
+        sceneKey: ''
 			}
 		},
-		onLoad() {
-
+		onLoad(option) {
+      this.sceneKey = option.key
 		},
 		methods: {
       checkboxChange (val) {
@@ -78,9 +79,24 @@
         this.radioId = val
       },
       submit () {
+        if (!this.radioId) {
+          uni.showToast({
+            icon: 'error',
+            title: '请选择受训对象'
+          })
+          return false
+        }
         const query = {
-          checkIds: this.radioId,
-          radioId: this.radioId,
+          sceneKey: this.sceneKey,
+          fields: [{
+            name: 'experience',
+            inputType: 'RADIO',
+            values: [this.radioId]
+          }, {
+            name: 'focus',
+            inputType: 'RADIO',
+            values: this.checkIds
+          }],
         }
         uni.navigateTo({
           url: `/pages/plan/plan?query=${encodeURIComponent(JSON.stringify(query))}`
