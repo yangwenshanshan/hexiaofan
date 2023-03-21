@@ -98,7 +98,7 @@
           }],
         }
         uni.navigateTo({
-          url: `/pages/plan/plan?query=${encodeURIComponent(JSON.stringify(query))}`
+          url: `/pages/plan/plan?query=${encodeURIComponent(JSON.stringify(query))}&isEn=1`
         })
       }
 		}

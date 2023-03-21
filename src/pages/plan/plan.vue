@@ -2,57 +2,63 @@
 	<view class="plan-page">
     <view class="plan-title">以下结果仅供参口，请根据自身情况适当调整</view>
     <view class="plan-result">
-			<view class="result-main">{{ content }}</view>
+			<scroll-view id="scroll-view" scroll-y :scroll-top="scrollTop" class="result-main">
+				<view class="content" id="content">{{ content }}</view>
+			</scroll-view>
 		</view>
     <view class="plan-btns">
-      <view class="btn-item" @click="copyContent">复制结果</view>
-      <view class="btn-item item-disabled" v-if="isEn">转换成英文</view>
-      <view class="btn-item" v-else @click="translateEnglish">{{ translateEn ? '转换成中文' : '转换成英文' }}</view>
+			<icon v-if="!complateFlag" type="loading" size="26"/>
+      <view class="btn-item" v-if="complateFlag" @click="copyContent">复制结果</view>
+      <view class="btn-item item-disabled" v-else>复制结果</view>
+      <view class="btn-item" v-if="!isEn && complateFlag" @click="translateEnglish">{{ isZh ? '转换成英文' : '转换成中文' }}</view>
+      <view class="btn-item item-disabled" v-else>转换成英文</view>
     </view>
 	</view>
 </template>
 
 <script>
-	import { api } from '../../api'
 	export default {
 		data() {
 			return {
 				isEn: false,
 				en_content: '',
 				zh_content: '',
-				content: '你是谁',
-				translateEn: false,
-				socketTask: null
+				content: '',
+				isZh: true,
+				socketTask: null,
+				complateFlag: false,
+				scrollTop: 0
 			}
 		},
 		onUnload () {
-			if (this.socketTask) {
-				this.socketTask = null
-				this.socketTask.close()
-			}
+			this.closeSocket()
 		},
 		onLoad(option){
 			const query = JSON.parse(decodeURIComponent(option.query))
-			this.isEn = !!query.isEn
-			this.postScenesChat(query)
+			this.isEn = !!option.isEn
+			this.postScenesChat(query,)
 		},
 		methods: {
+			closeSocket () {
+				if (this.socketTask) {
+					this.socketTask.close()
+					this.socketTask = null
+				}
+			},
 			copyContent () {
 				uni.setClipboardData({
 					data: this.content
 				})
 			},
-			postScenesChat (query) {
+			postScenesChat (query, cb) {
+				uni.showLoading()
+				this.complateFlag = false
+				this.content = ''
 				let token = uni.getStorageSync('token')
 				this.socketTask = uni.connectSocket({
-					// url: 'wss://greatchat.lanhejiaoyu.net/scenes/chat-headless/ws/' + token,
-					// header: {
-					// 	'Content-Type': 'application/json',
-					// },
-					url: 'wss://greatchat.lanhejiaoyu.net/scenes/chat/ws',
+					url: 'wss://greatchat.lanhejiaoyu.net/scenes/chat/ws/' + token,
 					header: {
 						'Content-Type': 'application/json',
-						'Authorization': 'Bearer ' + token
 					},
 					success: (res) => {
 						console.log('connect success', res)
@@ -67,44 +73,75 @@
 						}
 					})
 				})
+				this.socketTask.onError(error => {
+					hideLoading()
+					uni.showToast({
+						title: error.message,
+						icon: 'none'
+					})
+				})
 				this.socketTask.onMessage((res) => {
-					console.log('onMessage', res)
+					uni.hideLoading()
+					if (res.data === '==DONE==') {
+						this.closeSocket()
+						this.complateFlag = true
+					} else {
+						this.content += res.data
+					}
+					cb && cb(this.content)
+					const query = wx.createSelectorQuery()
+					query.select('#content').boundingClientRect((res) => {
+						this.scrollTop = res.height
+					}).exec()
 				})
 				this.socketTask.onClose(res => {
-					this.socketTask = null
 					console.log('close', res)
+					uni.hideLoading()
+					if (res.code == 3000) {
+						uni.showModal({
+							title: '提示',
+							content: '超过使用次数',
+							showCancel: false
+						})
+					} else if (res.code == 3001) {
+						uni.showModal({
+							title: '提示',
+							content: '参数解析失败',
+							showCancel: false
+						})
+					} else if (res.code == 3002) {
+						uni.showModal({
+							title: '提示',
+							content: '认证失败',
+							showCancel: false
+						})
+					} else if (res.code !== 1000) {
+						uni.showModal({
+							title: '提示',
+							content: res.reason,
+							showCancel: false
+						})
+					}
 				})
-				// uni.showLoading()
-				// api.postScenesChat(query).then(event => {
-				// 	uni.hideLoading()
-				// 	console.log('event', event)
-				// 	// const data = JSON.parse(event.data)
-				// 	// console.log(data)
-				// 	// /scenes/chat
-				// 	// console.log(res)
-				// 	// this.content = res.data.content
-				// }).catch(() => {
-				// 	uni.hideLoading()
-				// })
 			},
 
 			translateEnglish () {
-				if (!this.translateEn) {
+				if (this.isZh) {
 					this.zh_content = this.content
-					console.log(this.content)
-					uni.showLoading()
-					api.postScenesTranslate({
-						content: this.content
-					}).then(res => {
-						console.log(res)
-						this.content = res.data.content
-						this.en_content = res.data.content
-						uni.hideLoading()
-					})
+					if (!this.en_content) {
+						this.postScenesChat({
+							sceneKey: 'translate',
+							content: this.content
+						}, (res) => {
+							this.en_content = res
+						})
+					} else {
+						this.content = this.en_content
+					}
 				} else {
 					this.content = this.zh_content
 				}
-				this.translateEn = !this.translateEn
+				this.isZh = !this.isZh
 			}
 		}
 	}
@@ -121,12 +158,18 @@
 	}
 	.plan-result{
 		height: calc(100vh - 400rpx);
-		padding: 0 40rpx;
+		padding: 0rpx 40rpx;
 		.result-main{
 			background: #fff;
 			width: 100%;
 			height: 100%;
 			box-shadow: 0 2rpx 6rpx $uni-color-theme;
+			overflow: auto;
+			white-space: pre-wrap;
+			padding: 0 20rpx;
+			.content{
+				padding-bottom: 40rpx;
+			}
 		}
 	}
 	.plan-btns{

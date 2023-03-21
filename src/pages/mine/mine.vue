@@ -2,9 +2,10 @@
 	<view class="mine-page">
 		<view class="mine-avatar" @click="getUserProfile">
 			<view class="avatar-image" >
-				<image :src="userInfo.avatarUrl" mode="aspectFill"></image>
+				<image v-if="userInfo && userInfo.avatarUrl" :src="userInfo.avatarUrl" mode="aspectFill"></image>
+				<image v-else src="https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132" mode="aspectFill"></image>
 			</view>
-			<view>{{ userInfo.nickName }}</view>
+			<view>{{ userInfo && userInfo.nickName ? userInfo.nickName : '微信用户' }}</view>
 		</view>
 		<view class="mine-operate">
 			<view class="operate-item">
@@ -22,6 +23,21 @@
 				<text class="operate-text">给我们留言</text>
 			</view>
 		</view>
+
+		<view class="masked" v-if="maskVisible">
+			<view class="masked-main">
+				<view class="masked-title">绑定手机号</view>
+				<view class="masked-tips">绑定后将获得<text style="color:rgb(280,51,38)">更多免费</text>次数，同时方便您在网页或APP上继续使用</view>
+				<label class="mask-check">
+					<checkbox style="transform:scale(0.7)" color="#E05108" v-model="checked" />
+					<view>我已阅读并同意<text style="color:rgb(3, 42, 162)">《服务使用协议》</text></view>
+				</label>
+				<view class="mask-btn">
+					<view class="btn-item" @click="closeMasked">取消</view>
+					<button @getphonenumber="onGetPhoneNumber" open-type=getPhoneNumber class="btn-item" @click="">确定</button>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -32,24 +48,34 @@
 			return {
 				data: null,
 				code: '',
-				userInfo: {
-					avatarUrl: 'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132',
-					nickName: '微信用户'
-				}
+				checked: false,
+				maskVisible: false,
+				userInfo: null
 			}
 		},
 		onShow() {
-			uni.login({
-				success: (codeInfo) => {
-					this.code = codeInfo.code
-				}
-			})
+			this.getCode()
 			this.getQuotaRemaining()
+			this.userInfo = uni.getStorageSync('user')
 		},
 		methods: {
+			getCode () {
+				uni.login({
+					success: (codeInfo) => {
+						this.code = codeInfo.code
+					}
+				})
+			},
+			closeMasked () {
+				this.maskVisible = false
+			},
 			getUserInfo (query) {
+				this.getCode()
 				api.getUserInfo(query).then(res => {
-					console.log(res)
+					if (res.code === 'SUCCESS') {
+						this.userInfo = res.data
+						uni.setStorageSync('user', res.data)
+					}
 				})
 			},
 			getQuotaRemaining () {
@@ -70,16 +96,42 @@
 				})
 			},
 			goIncrease () {
-				uni.navigateTo({
-					url: `/pages/increase/increase`
-				})
+				const userInfo = uni.getStorageSync('user')
+				if (userInfo.phoneNumber) {
+					uni.navigateTo({
+						url: `/pages/increase/increase`
+					})
+				} else {
+					this.maskVisible = true
+				}
+			},
+			onGetPhoneNumber (event) {
+				// const detail = event.detail
+				// const userInfo = uni.getStorageSync('user')
+				// wx.showLoading()
+				// api.updatePhoneByWxMiniApp({
+				// 	code: detail.code,
+				// 	userId: userInfo.id,
+				// 	encryptedData: detail.encryptedData,
+				// 	iv: detail.iv
+				// }).then(res => {
+				// 	wx.hideLoading()
+				// 	if (res.code === 'SUCCESS') {
+				// 		if (res.data) {
+				// 			this.userInfo = res.data
+				// 			uni.setStorageSync('user', res.data)
+				// 		}
+				// 		this.maskVisible = false
+				// 	}
+				// }).catch(() => {
+				// 	wx.hideLoading()
+				// })
 			},
 			getUserProfile() {
 				const userInfo = uni.getStorageSync('user')
 				uni.getUserProfile({
 					desc: '用于完善会员资料',
 					success: (res) => {
-						console.log(res)
 						this.getUserInfo({
 							code: this.code,
 							userId: userInfo.id,
@@ -148,6 +200,52 @@
 				width: 50rpx;
 				height: 50rpx;
 				margin-right: 20rpx;
+			}
+		}
+	}
+	.masked{
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 100%;
+		width: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		padding-top: 300rpx;
+		.masked-main{
+			width: 650rpx;
+			background: #D3DBD1;
+			border: 2rpx solid #fff;
+			margin: auto;
+			border-radius: 10rpx;
+			// padding: 40rpx 40rpx 0 40rpx;
+			.masked-title{
+				text-align: center;
+				padding-top: 40rpx;
+			}
+			.masked-tips{
+				line-height: 1.5;
+				margin-top: 40rpx;
+				padding: 0 40rpx;
+			}
+			.mask-check{
+				display: flex;
+				align-items: center;
+				margin-top: 30rpx;
+				padding: 0 40rpx 40rpx 40rpx;
+			}
+			.mask-btn{
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				.btn-item{
+					width: 50%;
+					height: 80rpx;
+					line-height: 80rpx;
+					border: 2rpx solid #ccc;
+					text-align: center;
+				}
 			}
 		}
 	}

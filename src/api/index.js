@@ -7,5 +7,6 @@ export const api = {
   postScenesTranslate: (params) => http.post(`/scenes/translate`, params),
   postLeaveMessage: (params) => http.post(`/messages`, params),
   postQuotaAddUsage: (params) => http.post(`/quota/addUsage`, params),
-  getUserInfo: (params) => http.get(`/wx/info`, params),
+  getUserInfo: (params) => http.post(`/wx/info`, params),
+  updatePhoneByWxMiniApp: (params) => http.post(`/user/updatePhoneByWxMiniApp`, params),
 }

@@ -7,7 +7,7 @@
     <view class="increase-title">客服微信二维码</view>
 		<view class="qrcode">
 			<view class="qrcode-image">
-				<image :src="avatarUrl" mode="aspectFit"></image>
+				<image src="../../static/image/kefu.jpg" mode="aspectFit"></image>
 			</view>
 		</view>
 		<view class="increase-title">客服微信号</view>
@@ -22,7 +22,6 @@
 	export default {
 		data() {
 			return {
-				avatarUrl: 'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132',
 			}
 		},
 		onLoad() {
@@ -51,11 +50,10 @@
 		justify-content: center;
 		.qrcode-image{
 			background: #fff;
-			padding: 40rpx;
 			border-radius: 20rpx;
 			image{
-				width: 300rpx;
-				height: 300rpx;
+				width: 600rpx;
+				height: 600rpx;
 			}
 		}
 	}
