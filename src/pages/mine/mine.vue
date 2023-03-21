@@ -31,6 +31,7 @@
 		data() {
 			return {
 				data: null,
+				code: '',
 				userInfo: {
 					avatarUrl: 'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132',
 					nickName: '微信用户'
@@ -38,33 +39,18 @@
 			}
 		},
 		onShow() {
+			uni.login({
+				success: (codeInfo) => {
+					this.code = codeInfo.code
+				}
+			})
 			this.getQuotaRemaining()
-			// this.getUserInfo()
-			// uni.getUserProfile({
-			// 	success: (res) => {
-			// 		console.log(res)
-			// 	},
-			// 	fail: (error) => {
-			// 		console.log(error)
-			// 	}
-			// })
-			// uni.login({
-			// 	success: (res) => {
-			// 		console.log(res)
-			// 	}
-			// })
 		},
 		methods: {
 			getUserInfo (query) {
-				// api.getUserInfo({
-				// 	userId: 1,
-				// 	signature: '',
-				// 	rawData,
-				// 	encryptedData,
-				// 	iv: ''
-				// }).then(res => {
-				// 	console.log(res)
-				// })
+				api.getUserInfo(query).then(res => {
+					console.log(res)
+				})
 			},
 			getQuotaRemaining () {
 				api.getQuotaRemaining().then(res => {
@@ -89,10 +75,19 @@
 				})
 			},
 			getUserProfile() {
+				const userInfo = uni.getStorageSync('user')
 				uni.getUserProfile({
 					desc: '用于完善会员资料',
 					success: (res) => {
-						this.getUserInfo(res)
+						console.log(res)
+						this.getUserInfo({
+							code: this.code,
+							userId: userInfo.id,
+							signature: res.signature,
+							rawData: res.rawData,
+							encryptedData: res.encryptedData,
+							iv: res.iv
+						})
 					}
 				})
 			},

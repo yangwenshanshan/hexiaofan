@@ -21,7 +21,14 @@
 				en_content: '',
 				zh_content: '',
 				content: '你是谁',
-				translateEn: false
+				translateEn: false,
+				socketTask: null
+			}
+		},
+		onUnload () {
+			if (this.socketTask) {
+				this.socketTask = null
+				this.socketTask.close()
 			}
 		},
 		onLoad(option){
@@ -36,7 +43,37 @@
 				})
 			},
 			postScenesChat (query) {
-				console.log(query)
+				let token = uni.getStorageSync('token')
+				this.socketTask = uni.connectSocket({
+					// url: 'wss://greatchat.lanhejiaoyu.net/scenes/chat-headless/ws/' + token,
+					// header: {
+					// 	'Content-Type': 'application/json',
+					// },
+					url: 'wss://greatchat.lanhejiaoyu.net/scenes/chat/ws',
+					header: {
+						'Content-Type': 'application/json',
+						'Authorization': 'Bearer ' + token
+					},
+					success: (res) => {
+						console.log('connect success', res)
+					}
+				})
+				this.socketTask.onOpen((res) => {
+					console.log('open success', res)
+					this.socketTask.send({
+						data: JSON.stringify(query),
+						success: (response) => {
+							console.log('send success', response)
+						}
+					})
+				})
+				this.socketTask.onMessage((res) => {
+					console.log('onMessage', res)
+				})
+				this.socketTask.onClose(res => {
+					this.socketTask = null
+					console.log('close', res)
+				})
 				// uni.showLoading()
 				// api.postScenesChat(query).then(event => {
 				// 	uni.hideLoading()
@@ -50,6 +87,7 @@
 				// 	uni.hideLoading()
 				// })
 			},
+
 			translateEnglish () {
 				if (!this.translateEn) {
 					this.zh_content = this.content

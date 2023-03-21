@@ -6,11 +6,12 @@ uni.addInterceptor('request', {
   returnValue(args) {
     return new Promise((resolve, reject) => {
       args.then(res => {
-        // console.log('拦截器', res)
-        // if (res.data.code !== 'SUCCESS') {
-        //   uni.showToast(res.data.msg)
-        // }
-        // console.log(res)
+        if (res.data && res.data.code !== 'SUCCESS') {
+          uni.showToast({
+            title: res.data.code,
+            icon: 'none',
+          })
+        }
         resolve(res.data)
       })
     })
