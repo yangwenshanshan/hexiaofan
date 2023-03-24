@@ -146,7 +146,10 @@
 				this.mineFun()
 			}
 		},
-		onLoad() {
+		onLoad(option) {
+			if (option.needAuth) {
+				this.login()
+			}
 			wx.getSystemInfo({
 				success: (res) => {
 					const bottom = res.screenHeight - res.safeArea.bottom
@@ -292,6 +295,22 @@
 				uni.setNavigationBarTitle({
 					title: '我的'
 				})
+			},
+			login () {
+				// #ifdef MP-WEIXIN
+				uni.login({
+					success: (codeInfo) => {
+						api.login({
+							code: codeInfo.code
+						}).then(res => {
+							if (res.code === 'SUCCESS') {
+								uni.setStorageSync('token', res.data.token)
+								uni.setStorageSync('user', res.data.user)
+							}
+						})
+					}
+				})
+				// #endif
 			}
 		},
 		onShareAppMessage () {

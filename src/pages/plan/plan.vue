@@ -119,8 +119,13 @@
 					} else if (res.code == 3002) {
 						uni.showModal({
 							title: '提示',
-							content: '认证失败',
-							showCancel: false
+							content: '登录超时，重新登录',
+							showCancel: false,
+							success: () => {
+								wx.reLaunch({
+                  url: '/pages/home/home?needAuth=1'
+                })
+							}
 						})
 					} else if (res.code !== 1000) {
 						uni.showModal({

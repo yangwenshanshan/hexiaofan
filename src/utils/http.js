@@ -7,10 +7,23 @@ uni.addInterceptor('request', {
     return new Promise((resolve, reject) => {
       args.then(res => {
         if (res.data && res.data.code !== 'SUCCESS') {
-          uni.showToast({
-            title: res.data.code,
-            icon: 'none',
-          })
+          if (res.data.code === 'AUTH_ERROR') {
+            uni.showModal({
+							title: '提示',
+							content: '登录超时，重新登录',
+							showCancel: false,
+              success: () => {
+                wx.reLaunch({
+                  url: '/pages/home/home?needAuth=1'
+                })
+              }
+						})
+          } else {
+            uni.showToast({
+              title: res.data.code,
+              icon: 'none',
+            })
+          }
         }
         resolve(res.data)
       })
