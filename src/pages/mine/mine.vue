@@ -22,6 +22,14 @@
 				<image class="item-icon" src="../../static/image/icon_message.png" mode="aspectFit"></image>
 				<text class="operate-text">给我们留言</text>
 			</view>
+			<view class="operate-tips">
+				<view>你不懂我。</view>
+				<view>因为我是迷雾中的一朵花，</view>
+				<view>像一片清晨的浅绿，细腻而柔美。</view>
+				<view>在日月轮回的呼吸中凝视，</view>
+				<view>那些风景，那些故事，</view>
+				<view>静静流淌...</view>
+			</view>
 		</view>
 
 		<view class="masked" v-if="maskVisible">
@@ -29,12 +37,15 @@
 				<view class="masked-title">绑定手机号</view>
 				<view class="masked-tips">绑定后将获得<text style="color:rgb(280,51,38)">更多免费</text>次数，同时方便您在网页或APP上继续使用</view>
 				<label class="mask-check">
-					<checkbox style="transform:scale(0.7)" color="#E05108" v-model="checked" />
-					<view>我已阅读并同意<text style="color:rgb(3, 42, 162)">《服务使用协议》</text></view>
+					<checkbox-group @change="checkChange">
+						<checkbox style="transform:scale(0.7)" color="#E05108" value="1" />
+					</checkbox-group>
+					<view>我已阅读并同意<text @click.stop="goPrivacy" style="color:rgb(3, 42, 162)">《服务使用协议》</text></view>
 				</label>
 				<view class="mask-btn">
 					<view class="btn-item" @click="closeMasked">取消</view>
-					<button @getphonenumber="onGetPhoneNumber" open-type=getPhoneNumber class="btn-item" @click="">确定</button>
+					<view class="btn-item" v-if="!checked" @click="showToastInfo">确定</view>
+					<button v-if="checked" @getphonenumber="onGetPhoneNumber" open-type=getPhoneNumber class="btn-item">确定</button>
 				</view>
 			</view>
 		</view>
@@ -97,7 +108,7 @@
 			},
 			goIncrease () {
 				const userInfo = uni.getStorageSync('user')
-				if (userInfo.phoneNumber) {
+				if (userInfo.hasPhoneNumber) {
 					uni.navigateTo({
 						url: `/pages/increase/increase`
 					})
@@ -106,26 +117,44 @@
 				}
 			},
 			onGetPhoneNumber (event) {
-				// const detail = event.detail
-				// const userInfo = uni.getStorageSync('user')
-				// wx.showLoading()
-				// api.updatePhoneByWxMiniApp({
-				// 	code: detail.code,
-				// 	userId: userInfo.id,
-				// 	encryptedData: detail.encryptedData,
-				// 	iv: detail.iv
-				// }).then(res => {
-				// 	wx.hideLoading()
-				// 	if (res.code === 'SUCCESS') {
-				// 		if (res.data) {
-				// 			this.userInfo = res.data
-				// 			uni.setStorageSync('user', res.data)
-				// 		}
-				// 		this.maskVisible = false
-				// 	}
-				// }).catch(() => {
-				// 	wx.hideLoading()
-				// })
+				const detail = event.detail
+				const userInfo = uni.getStorageSync('user')
+				if (detail.code) {
+					wx.showLoading()
+					api.updatePhoneByWxMiniApp({
+						code: detail.code,
+						userId: userInfo.id,
+						encryptedData: detail.encryptedData,
+						iv: detail.iv
+					}).then(res => {
+						wx.hideLoading()
+						if (res.code === 'SUCCESS') {
+							if (res.data) {
+								this.userInfo = res.data.user
+								uni.setStorageSync('user', res.data.user)
+							}
+							this.maskVisible = false
+							this.getQuotaRemaining()
+						}
+					}).catch(() => {
+						wx.hideLoading()
+					})
+				}
+			},
+			checkChange (event) {
+				const values = event.detail.value
+				this.checked = values.includes('1')
+			},
+			showToastInfo () {
+				uni.showToast({
+					title: '请勾选同意服务使用协议',
+					icon: 'none'
+				})
+			},
+			goPrivacy () {
+				uni.navigateTo({
+					url: '/pages/privacyAgreement/privacyAgreement'
+				})
 			},
 			getUserProfile() {
 				const userInfo = uni.getStorageSync('user')
@@ -143,6 +172,13 @@
 					}
 				})
 			},
+		},
+		onShareAppMessage () {
+			return {
+				page: '/pages/home/home',
+				title: "河小帆",
+				imageUrl: 'https://greatchat.lanhejiaoyu.net/static/img/sail-7.png'
+			}
 		}
 	}
 </script>
@@ -195,12 +231,22 @@
 				background: #D56D2A;
 				border-radius: 8rpx;
 				padding: 10rpx 20rpx;
+				font-size: 32rpx;
 			}
 			.item-icon{
 				width: 50rpx;
 				height: 50rpx;
 				margin-right: 20rpx;
 			}
+			.operate-text{
+				font-size: 32rpx;
+			}
+		}
+		.operate-tips{
+			color: #83998A;
+			font-size: 32rpx;
+			padding: 20rpx 60rpx 0 60rpx;
+			line-height: 1.7;
 		}
 	}
 	.masked{
@@ -213,6 +259,7 @@
 		width: 100%;
 		background: rgba(0, 0, 0, 0.5);
 		padding-top: 300rpx;
+		font-size: 32rpx;
 		.masked-main{
 			width: 650rpx;
 			background: #D3DBD1;
@@ -245,6 +292,9 @@
 					line-height: 80rpx;
 					border: 2rpx solid #ccc;
 					text-align: center;
+				}
+				button{
+					font-size: 32rpx;
 				}
 			}
 		}

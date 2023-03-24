@@ -83,6 +83,12 @@
 			"style": {
 				"navigationBarTitleText": "增加次数"
 			}
+		},
+		{
+			"path": "pages/privacyAgreement/privacyAgreement",
+			"style": {
+				"navigationBarTitleText": "服务使用协议"
+			}
 		}
 	],
 	"globalStyle": {
@@ -90,22 +96,5 @@
 		"navigationBarTitleText": "河小帆",
 		"navigationBarBackgroundColor": "#748C7C",
 		"backgroundColor": "#E8E8E8"
-	},
-	"tabBar": {
-		"color": "#ffffff",
-		"selectedColor": "#ffffff",
-		"borderStyle": "white",
-		"backgroundColor": "#748C7C",
-		"list": [{
-			"pagePath": "pages/home/home",
-			"iconPath": "static/image/icon_home.png",
-			"selectedIconPath": "static/image/icon_home.png",
-			"text": "首页"
-		}, {
-			"pagePath": "pages/mine/mine",
-			"iconPath": "static/image/icon_people.png",
-			"selectedIconPath": "static/image/icon_people.png",
-			"text": "我的"
-		}]
 	}
 }

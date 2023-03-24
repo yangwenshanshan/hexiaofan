@@ -167,7 +167,7 @@
 .communicationMethod-page{
 	.list-cell{
 		display: flex;
-		padding-left: 40rpx;
+		padding-left: 20rpx;
 		font-size: 32rpx;
 		margin-bottom: 20rpx;
 		align-items: center;

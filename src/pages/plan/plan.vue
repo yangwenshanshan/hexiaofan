@@ -1,6 +1,6 @@
 <template>
 	<view class="plan-page">
-    <view class="plan-title">以下结果仅供参口，请根据自身情况适当调整</view>
+    <view class="plan-title">以下结果仅供参考，请根据自身情况适当调整</view>
     <view class="plan-result">
 			<scroll-view id="scroll-view" scroll-y :scroll-top="scrollTop" class="result-main">
 				<view class="content" id="content">{{ content }}</view>
@@ -36,7 +36,7 @@
 		onLoad(option){
 			const query = JSON.parse(decodeURIComponent(option.query))
 			this.isEn = !!option.isEn
-			this.postScenesChat(query,)
+			this.postScenesChat(query)
 		},
 		methods: {
 			closeSocket () {
@@ -51,7 +51,9 @@
 				})
 			},
 			postScenesChat (query, cb) {
-				uni.showLoading()
+				uni.showLoading({
+					title: '正在创作中...'
+				})
 				this.complateFlag = false
 				this.content = ''
 				let token = uni.getStorageSync('token')
@@ -100,8 +102,13 @@
 					if (res.code == 3000) {
 						uni.showModal({
 							title: '提示',
-							content: '超过使用次数',
-							showCancel: false
+							content: '哎呀～次数用完啦～先增加次数吧！',
+							showCancel: false,
+							success: () => {
+								uni.navigateTo({
+									url: '/pages/mine/mine'
+								})
+							}
 						})
 					} else if (res.code == 3001) {
 						uni.showModal({
@@ -159,6 +166,7 @@
 	.plan-result{
 		height: calc(100vh - 400rpx);
 		padding: 0rpx 40rpx;
+		font-size: 32rpx;
 		.result-main{
 			background: #fff;
 			width: 100%;
@@ -177,13 +185,16 @@
 		align-items: center;
 		justify-content: center;
 		padding-top: 40rpx;
+		font-size: 32rpx;
 		.btn-item{
+			width: 240rpx;
 			background: #C3DBCD;
 			color: $uni-text-color;
 			padding: 20rpx 40rpx;
 			border-radius: 10rpx;
 			box-shadow: 0 2rpx 6rpx $uni-color-theme;
 			margin-right: 60rpx;
+			text-align: center;
 			&:last-of-type{
 				margin-right: 0;
 			}

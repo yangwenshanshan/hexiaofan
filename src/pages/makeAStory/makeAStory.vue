@@ -21,7 +21,7 @@
         <view class="block-title">故事主角</view>
       </view>
       <view class="block-input">
-        <input v-model="input" :maxlength="14" placeholder="最多填写四个词语 不超过10个字" />
+        <input v-model="input" :maxlength="13" placeholder="最多填写四个词语 不超过10个字" />
       </view>
       <view class="input-tips">*用逗号区分词语，如"大象，海岛"</view>
     </view>
