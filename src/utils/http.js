@@ -13,7 +13,7 @@ uni.addInterceptor('request', {
 							content: '登录超时，重新登录',
 							showCancel: false,
               success: () => {
-                wx.reLaunch({
+                uni.reLaunch({
                   url: '/pages/home/home?needAuth=1'
                 })
               }

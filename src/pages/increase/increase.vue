@@ -1,14 +1,24 @@
 <template>
 	<view class="increase-page">
-		<view class="discount-main">
-			<view class="discount-item item-weight">
-				<image class="" src="../../static/image/icon_discount.png" mode="aspectFit"></image>
-				限时优惠中(赠送20次)</view>
-			<view class="discount-item item-noneimage">9.9元: 120次(含赠送20次)</view>
+		<view class="increase-text" v-if="isIOS">
+			<view class="text-main">由于苹果系统对虚拟商品的限制</view>
+			<view class="text-main">需要您添加客服微信来增加次数</view>
 		</view>
-		<view class="increase-text">
-			<view class="text-main">支付功能开通中</view>
-			<view class="text-main">请添加客服升级次数</view>
+		<view class="discount-main" v-else>
+			<view class="discount-item item-weight">请选择套餐</view>
+			<radio-group @change="radioChange">
+				<label class="discount-radio" v-for="item in list" :key="item.id">
+					<radio color="#E05108" :value="item.id"/>
+					<view class="radio-name" :class="item.id === currentValue ? 'checked' : ''">
+						<view class="name-price">{{item.price}}元</view>
+						<view class="name-line"></view>
+						<view class="name-quota">{{item.quota}}次</view>
+					</view>
+				</label>
+			</radio-group>
+			<view class="btn-main-pay">
+				<view class="btn-pay" @click="goPay">去支付</view>
+			</view>
 		</view>
     <view class="increase-title">客服微信二维码</view>
 		<view class="qrcode">
@@ -26,18 +36,79 @@
 </template>
 
 <script>
+	import { api } from '../../api'
 	export default {
 		data() {
 			return {
+				isIOS: false,
+				list: [],
+				currentValue: ''
 			}
 		},
 		onLoad() {
+			uni.getSystemInfo({
+				success: (res) => {
+					this.isIOS = res.platform === 'ios'
+				}
+			})
+			this.getSubscriptions()
 		},
 		methods: {
+			goPay () {
+				if (this.currentValue) {
+					uni.showLoading()
+					api.postPayWechat({
+						subscriptionId: this.currentValue
+					}).then(res => {
+						uni.hideLoading()
+						if (res.code === 'SUCCESS') {
+							const payment = res.data.payment
+							uni.requestPayment({
+								timeStamp: payment.timeStamp,
+								nonceStr: payment.nonceStr,
+								package: payment.packageValue,
+								signType: payment.signType,
+								paySign: payment.paySign,
+								success: (res) => {
+									console.log('success', res)
+									uni.showToast({
+										title: '支付成功',
+										icon: 'success'
+									})
+									setTimeout(() => {
+										uni.navigateBack()
+									}, 1500);
+								},
+								fail: (error) => {
+									if (!error.errMsg.includes('cancel')) {
+										wx.showModal({
+											title: '提示',
+											content: '支付失败',
+											showCancel: false
+										})
+									}
+								}
+							})
+						}
+					}).catch(() => {
+						uni.hideLoading()
+					})
+				}
+			},
+			getSubscriptions () {
+				api.getSubscriptions().then(res => {
+					if (res.code === 'SUCCESS') {
+						this.list = res.data
+					}
+				})
+			},
 			copy () {
 				uni.setClipboardData({
 					data: 'lanhekeji007'
 				})
+			},
+			radioChange (e) {
+				this.currentValue = parseInt(e.detail.value)
 			}
 		},
 		onShareAppMessage () {
@@ -111,24 +182,59 @@
 		}
 	}
 	.discount-main{
-		padding: 30rpx 0 40rpx 60rpx;
+		padding: 30rpx 0 40rpx 0;
 		border-bottom: 1px solid #ccc;
 		.discount-item{
 			font-size: 36rpx;
 			line-height: 2;
 			display: flex;
 			align-items: center;
-			image{
-				width: 60rpx;
-				height: 60rpx;
-				margin-right: 20rpx;
-			}
+			justify-content: center;
+			// text-shadow: 0 10rpx 6rpx $uni-color-theme;
 		}
 		.item-weight{
 			font-weight: bold;
 		}
 		.item-noneimage{
 			padding-left: 80rpx;
+		}
+		.discount-radio{
+			display: flex;
+			width: 100%;
+			padding: 20rpx 100rpx;
+			.radio-name{
+				display: flex;
+				width: 100%;
+				align-items: center;
+				.name-price{
+					font-size: 32rpx;
+				}
+				.name-line{
+					flex: 1;
+					margin: 0 20rpx;
+					border-top: 1px dashed $uni-color-theme;
+				}
+				.name-quota{
+					font-size: 32rpx;
+				}
+			}
+			.checked{
+				color: #E05108;
+			}
+		}
+	}
+	.btn-main-pay{
+		display: flex;
+		align-content: center;
+		justify-content: center;
+		margin-top: 40rpx;
+		.btn-pay{
+			color: #fff;
+			background: $uni-color-theme;
+			border-radius: 8rpx;
+			padding: 10rpx 40rpx;
+			box-shadow: 0 4rpx 6rpx $uni-color-theme;
+			font-size: 32rpx;
 		}
 	}
 }

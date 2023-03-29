@@ -120,14 +120,14 @@
 				const detail = event.detail
 				const userInfo = uni.getStorageSync('user')
 				if (detail.code) {
-					wx.showLoading()
+					uni.showLoading()
 					api.updatePhoneByWxMiniApp({
 						code: detail.code,
 						userId: userInfo.id,
 						encryptedData: detail.encryptedData,
 						iv: detail.iv
 					}).then(res => {
-						wx.hideLoading()
+						uni.hideLoading()
 						if (res.code === 'SUCCESS') {
 							if (res.data) {
 								this.userInfo = res.data.user
@@ -137,7 +137,7 @@
 							this.getQuotaRemaining()
 						}
 					}).catch(() => {
-						wx.hideLoading()
+						uni.hideLoading()
 					})
 				}
 			},

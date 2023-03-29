@@ -91,7 +91,7 @@
 						this.content += res.data
 					}
 					cb && cb(this.content)
-					const query = wx.createSelectorQuery()
+					const query = uni.createSelectorQuery()
 					query.select('#content').boundingClientRect((res) => {
 						this.scrollTop = res.height
 					}).exec()
@@ -106,7 +106,8 @@
 							showCancel: false,
 							success: () => {
 								uni.navigateTo({
-									url: '/pages/mine/mine'
+									// url: '/pages/increase/increase'
+									url: '/pages/home/home?path=mine'
 								})
 							}
 						})
@@ -122,7 +123,7 @@
 							content: '登录超时，重新登录',
 							showCancel: false,
 							success: () => {
-								wx.reLaunch({
+								uni.reLaunch({
                   url: '/pages/home/home?needAuth=1'
                 })
 							}

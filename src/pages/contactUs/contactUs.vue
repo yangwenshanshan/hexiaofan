@@ -58,8 +58,8 @@
 			padding: 10rpx 0;
 			image{
 				display: block;
-				width: 600rpx;
-				height: 600rpx;
+				width: 500rpx;
+				height: 500rpx;
 				border-radius: 20rpx;
 			}
 		}

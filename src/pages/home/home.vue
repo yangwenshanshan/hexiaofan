@@ -150,7 +150,10 @@
 			if (option.needAuth) {
 				this.login()
 			}
-			wx.getSystemInfo({
+			if (option.path === 'mine') {
+				this.type = 'mine'
+			}
+			uni.getSystemInfo({
 				success: (res) => {
 					const bottom = res.screenHeight - res.safeArea.bottom
 					if (bottom >= 20) {
@@ -231,14 +234,14 @@
 				const detail = event.detail
 				const userInfo = uni.getStorageSync('user')
 				if (detail.code) {
-					wx.showLoading()
+					uni.showLoading()
 					api.updatePhoneByWxMiniApp({
 						code: detail.code,
 						userId: userInfo.id,
 						encryptedData: detail.encryptedData,
 						iv: detail.iv
 					}).then(res => {
-						wx.hideLoading()
+						uni.hideLoading()
 						if (res.code === 'SUCCESS') {
 							if (res.data) {
 								this.userInfo = res.data.user
@@ -248,7 +251,7 @@
 							this.getQuotaRemaining()
 						}
 					}).catch(() => {
-						wx.hideLoading()
+						uni.hideLoading()
 					})
 				}
 			},
@@ -446,7 +449,7 @@ $btn-color: #A4C0AE, #D3DBD1, #BDC4AE, #B5C4B1,  #C3DBCD, #AAB4A8, #B6CDB8, #B3C
 			.operate-tips{
 				color: #83998A;
 				font-size: 32rpx;
-				padding: 20rpx 60rpx 0 60rpx;
+				padding: 0rpx 60rpx 0 60rpx;
 				line-height: 1.7;
 				display: flex;
 				flex-direction: column;

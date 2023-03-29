@@ -9,4 +9,6 @@ export const api = {
   postQuotaAddUsage: (params) => http.post(`/quota/addUsage`, params),
   getUserInfo: (params) => http.post(`/wx/info`, params),
   updatePhoneByWxMiniApp: (params) => http.post(`/user/updatePhoneByWxMiniApp`, params),
+  postPayWechat: (params) => http.post(`/pay/wechat`, params),
+  getSubscriptions: (params) => http.get(`/subscriptions`, params),
 }
