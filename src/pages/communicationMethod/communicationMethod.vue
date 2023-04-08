@@ -29,7 +29,7 @@
 				parentId: 0,
 				childrenId: 0,
         radioList: [{
-					value: '与家长沟通',
+					value: '家长',
 					name: '与家长沟通',
 					children: [{
 						value: '肯定孩子表现',
@@ -45,7 +45,7 @@
 						name: '提示按时出勤'
 					}]
 				}, {
-					value: '与孩子沟通',
+					value: '孩子',
 					name: '与孩子沟通',
 					children: [{
 						value: '表扬态度积极',
@@ -61,7 +61,7 @@
 						name: '提升文明程度'
 					}]
 				}, {
-					value: '与领导沟通',
+					value: '领导',
 					name: '与领导沟通',
 					children: [{
 						value: '说明工作繁重',
@@ -77,7 +77,7 @@
 						name: '协商离职事宜'
 					}]
 				}, {
-					value: '与下属沟通',
+					value: '下属',
 					name: '与下属沟通',
 					children: [{
 						value: '肯定工作表现',
@@ -93,7 +93,7 @@
 						name: '通知解聘事宜'
 					}]
 				}, {
-					value: '与同事沟通',
+					value: '同事',
 					name: '与同事沟通',
 					children: [{
 						value: '解决矛盾冲突',
@@ -103,7 +103,7 @@
 						name: '安慰沮丧情绪'
 					}]
 				}, {
-					value: '与外部机构沟通',
+					value: '外部机构',
 					name: '与外部机构沟通',
 					children: [{
 						value: '招生引流合作',
@@ -146,11 +146,11 @@
         const query = {
           sceneKey: this.sceneKey,
           fields: [{
-            name: 'purpose',
+            name: 'target',
             inputType: 'RADIO',
             values: [this.parentId]
           }, {
-            name: 'target',
+            name: 'purpose',
             inputType: 'RADIO',
             values: [this.childrenId]
           }],
