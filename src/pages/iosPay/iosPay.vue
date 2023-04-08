@@ -1,6 +1,10 @@
 <template>
 	<view class="increase-page">
-		<view class="discount-main">
+		<view class="increase-text" v-if="isIOS">
+			<view class="text-main">由于苹果系统对虚拟商品的限制</view>
+			<view class="text-main">需要您添加客服微信来增加次数</view>
+		</view>
+		<view class="discount-main" v-else>
 			<view class="discount-item item-weight">请选择套餐</view>
 			<radio-group @change="radioChange">
 				<label class="discount-radio" v-for="item in list" :key="item.id">
@@ -51,50 +55,44 @@
 		},
 		methods: {
 			goPay () {
-				if (this.isIOS) {
-					uni.navigateTo({
-						url: '/pages/iosPay/iosPay'
-					})
-				} else {
-					if (this.currentValue) {
-						uni.showLoading()
-						api.postPayWechat({
-							subscriptionId: this.currentValue
-						}).then(res => {
-							uni.hideLoading()
-							if (res.code === 'SUCCESS') {
-								const payment = res.data.payment
-								uni.requestPayment({
-									timeStamp: payment.timeStamp,
-									nonceStr: payment.nonceStr,
-									package: payment.packageValue,
-									signType: payment.signType,
-									paySign: payment.paySign,
-									success: (res) => {
-										console.log('success', res)
-										uni.showToast({
-											title: '支付成功',
-											icon: 'success'
+				if (this.currentValue) {
+					uni.showLoading()
+					api.postPayWechat({
+						subscriptionId: this.currentValue
+					}).then(res => {
+						uni.hideLoading()
+						if (res.code === 'SUCCESS') {
+							const payment = res.data.payment
+							uni.requestPayment({
+								timeStamp: payment.timeStamp,
+								nonceStr: payment.nonceStr,
+								package: payment.packageValue,
+								signType: payment.signType,
+								paySign: payment.paySign,
+								success: (res) => {
+									console.log('success', res)
+									uni.showToast({
+										title: '支付成功',
+										icon: 'success'
+									})
+									setTimeout(() => {
+										uni.navigateBack()
+									}, 1500);
+								},
+								fail: (error) => {
+									if (!error.errMsg.includes('cancel')) {
+										wx.showModal({
+											title: '提示',
+											content: '支付失败',
+											showCancel: false
 										})
-										setTimeout(() => {
-											uni.navigateBack()
-										}, 1500);
-									},
-									fail: (error) => {
-										if (!error.errMsg.includes('cancel')) {
-											wx.showModal({
-												title: '提示',
-												content: '支付失败',
-												showCancel: false
-											})
-										}
 									}
-								})
-							}
-						}).catch(() => {
-							uni.hideLoading()
-						})
-					}
+								}
+							})
+						}
+					}).catch(() => {
+						uni.hideLoading()
+					})
 				}
 			},
 			getSubscriptions () {

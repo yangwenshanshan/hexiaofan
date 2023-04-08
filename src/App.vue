@@ -106,6 +106,15 @@
 		font-size: 28rpx;
 	}
 }
+textarea{
+	background: #fff;
+	border: 1px solid $uni-color-theme;
+	padding: 10rpx;
+	border-radius: 10rpx;
+	text-align: center;
+	font-size: 28rpx;
+	width: 100%;
+}
 .operate-block{
 	display: flex;
 	align-items: center;

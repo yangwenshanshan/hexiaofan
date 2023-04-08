@@ -14,7 +14,7 @@
         <view class="block-title">游戏内容</view>
       </view>
       <view class="block-input">
-        <input v-model="input" :maxlength="13" placeholder="最多填写4个词语，不超过10个字" />
+        <input v-model="input" placeholder="最多填写4个词语，不超过10个字" />
       </view>
       <view class="input-tips">*用逗号区分词语，如"非洲鼓"或者"海岛，唱歌"</view>
     </view>
@@ -54,6 +54,13 @@
         this.radioId = val
       },
       submit () {
+        if (this.input && this.input.length > 13) {
+          uni.showToast({
+            icon: 'none',
+            title: '最多填写4个词语，不超过10个字'
+          })
+          return false
+        }
         if (!this.radioId) {
           uni.showToast({
             icon: 'error',

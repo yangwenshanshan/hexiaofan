@@ -7,6 +7,12 @@
 			}
 		},
 		{
+			"path": "pages/subHome/subHome",
+			"style": {
+				"navigationBarTitleText": "教学专区"
+			}
+		},
+		{
 			"path": "pages/mine/mine",
 			"style": {
 				"navigationBarTitleText": "我的"
@@ -88,6 +94,42 @@
 			"path": "pages/privacyAgreement/privacyAgreement",
 			"style": {
 				"navigationBarTitleText": "服务使用协议"
+			}
+		},
+		{
+			"path": "pages/programPlanning/programPlanning",
+			"style": {
+				"navigationBarTitleText": "方案策划"
+			}
+		},
+		{
+			"path": "pages/originalPapers/originalPapers",
+			"style": {
+				"navigationBarTitleText": "原创论文"
+			}
+		},
+		{
+			"path": "pages/contentGeneration/contentGeneration",
+			"style": {
+				"navigationBarTitleText": "内容生成"
+			}
+		},
+		{
+			"path": "pages/runColorRewriting/runColorRewriting",
+			"style": {
+				"navigationBarTitleText": "润色改写"
+			}
+		},
+		{
+			"path": "pages/rescueTheSocialTerror/rescueTheSocialTerror",
+			"style": {
+				"navigationBarTitleText": "拯救社恐"
+			}
+		},
+		{
+			"path": "pages/iosPay/iosPay",
+			"style": {
+				"navigationBarTitleText": "增加次数"
 			}
 		}
 	],

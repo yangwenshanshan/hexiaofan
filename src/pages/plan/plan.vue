@@ -1,6 +1,9 @@
 <template>
 	<view class="plan-page">
-    <view class="plan-title">以下结果仅供参考，请根据自身情况适当调整</view>
+    <view class="plan-title-block">
+			<view class="plan-title">以下结果仅供参考，不代表河小帆立场</view>
+    	<view class="plan-title">请根据自身情况适当调整</view>
+		</view>
     <view class="plan-result">
 			<scroll-view id="scroll-view" scroll-y :scroll-top="scrollTop" class="result-main">
 				<view class="content" id="content">{{ content }}</view>
@@ -164,10 +167,13 @@
 .plan-page{
   background: $uni-bg-color-grey;
 	min-height: 100vh;
-	.plan-title{
-		color: red;
-		text-align: center;
-		padding: 40rpx 0;
+	.plan-title-block{
+		padding: 40rpx 0 40rpx 60rpx;
+		.plan-title{
+			color: red;
+			text-align: left;
+			line-height: 1.5;
+		}
 	}
 	.plan-result{
 		height: calc(100vh - 400rpx);

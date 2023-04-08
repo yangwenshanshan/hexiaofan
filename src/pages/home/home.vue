@@ -8,7 +8,7 @@
 					</view>
 				</view>
 				<view class="btn-more">
-					<view class="more-main" @click="goContactUs">我有更多想法</view>
+					<view class="more-main" @click="goContactUs">我有更多需求</view>
 				</view>
 			</view>
 		</view>
@@ -97,47 +97,36 @@
 				userInfo: null,
 				type: 'home',
 
-
 				titeList: [{
 					index: 1,
-					key: 'TSC01',
-					en_title: 'creativeLesson',
-					title: '创意教案'
+					key: '',
+					en_title: 'subHome',
+					title: '教学专区'
 				}, {
 					index: 2,
-					key: 'TSC02',
-					en_title: 'makeAStory',
-					title: '编个故事'
+					key: 'TSC56',
+					en_title: 'rescueTheSocialTerror',
+					title: '拯救社恐'
 				}, {
 					index: 3,
-					key: 'TSC03',
-					en_title: 'classroomGame',
-					title: '课堂游戏'
+					key: 'TSC09',
+					en_title: 'contentGeneration',
+					title: '内容生成'
 				}, {
 					index: 4,
-					key: 'TSC04',
-					en_title: 'speak',
-					title: '讲话发言'
+					key: 'TSC10',
+					en_title: 'runColorRewriting',
+					title: '润色改写'
 				}, {
 					index: 5,
-					key: 'TSC05',
-					en_title: 'familyActivities',
-					title: '亲子活动'
+					key: 'TSC11',
+					en_title: 'originalPapers',
+					title: '原创论文'
 				}, {
 					index: 6,
-					key: 'TSC06',
-					en_title: 'communicationMethod',
-					title: '沟通方法'
-				}, {
-					index: 7,
-					key: 'TSC07',
-					en_title: 'englishScene',
-					title: '英文场景'
-				}, {
-					index: 8,
-					key: 'TSC08',
-					en_title: 'trainingProgram',
-					title: '培训方案'
+					key: 'TSC12',
+					en_title: 'programPlanning',
+					title: '方案策划'
 				}]
 			}
 		},
@@ -163,7 +152,7 @@
 					}
 					this.tabHeight = 'calc(120rpx + ' + this.bottomHeight + 'px)'
 					this.homePageHeight = 'calc(100vh - 120rpx - '+ this.bottomHeight + 'px)'
-					this.marginBottom = 'calc((100vh - 4 * 176rpx - 300rpx - 120rpx - '+ this.bottomHeight + 'px) / 4)'
+					this.marginBottom = 'calc((100vh - 3 * 176rpx - 300rpx - 120rpx - '+ this.bottomHeight + 'px) / 4)'
 					this.tipsHeight = 'calc(100vh - 120rpx - 720rpx - ' + this.bottomHeight + 'px)'
 				}
 			})

@@ -21,7 +21,7 @@
         <view class="block-title">教案主题</view>
       </view>
       <view class="block-input">
-        <input :maxlength="5" v-model="input" placeholder="最多输入5个字" />
+        <input v-model="input" placeholder="最多输入5个字" />
       </view>
     </view>
     <view class="operate-block">
@@ -93,6 +93,13 @@
           uni.showToast({
             icon: 'error',
             title: '请选择年龄段'
+          })
+          return false
+        }
+        if (this.input && this.input.length > 5) {
+          uni.showToast({
+            icon: 'none',
+            title: '教案主题不超过5个字'
           })
           return false
         }
