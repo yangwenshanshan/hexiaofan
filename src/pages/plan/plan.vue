@@ -20,6 +20,7 @@
 </template>
 
 <script>
+	import { api } from '../../api'
 	export default {
 		data() {
 			return {
@@ -39,9 +40,39 @@
 		onLoad(option){
 			const query = JSON.parse(decodeURIComponent(option.query))
 			this.isEn = !!option.isEn
-			this.postScenesChat(query)
+			this.getSencesCosts(query)
 		},
 		methods: {
+			async getSencesCosts (query) {
+				uni.showLoading({
+					title: '正在创作中...'
+				})
+				const result = await api.getSencesCosts(query)
+				uni.hideLoading()
+				if (result.code === 'SUCCESS') {
+					if (result.data.original != 1) {
+						let content = ''
+						if (result.data.current === result.data.original) {
+							content = `本次需要消耗${result.data.current}个使用次数。是否继续`
+						} else {
+							content = `本次需要消耗${result.data.current}个(原价${result.data.original}个)使用次数。是否继续`
+						}
+						uni.showModal({
+							title: '提示',
+							content: content,
+						}).then(res => {
+							if (res.confirm) {
+								this.postScenesChat(query)
+							} else {
+								uni.navigateBack()
+							}
+						})
+					} else {
+						this.postScenesChat(query)
+					}
+				}
+				return false
+			},
 			closeSocket () {
 				if (this.socketTask) {
 					this.socketTask.close()

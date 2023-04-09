@@ -8,7 +8,7 @@
         <input v-model="identity" placeholder="填写或从下面选择，不超6个字" />
       </view>
       <view class="item-list">
-        <view class="item-block" @click="chooseBlock(item, 'identity')" v-for="(item, index) in identityList" :key="index">{{ item }}</view>
+        <view class="item-block" @click="chooseBlock(item.exampleValue, 'identity')" v-for="(item, index) in identityList" :key="index">{{ item.exampleValue }}</view>
       </view>
       <view class="block-dash-line">
         <view class="line-main"></view>
@@ -20,7 +20,7 @@
         <input v-model="partner" placeholder="填写或从下面选择，不超6个字" />
       </view>
       <view class="item-list">
-        <view class="item-block" @click="chooseBlock(item, 'partner')" v-for="(item, index) in objectList" :key="index">{{ item }}</view>
+        <view class="item-block" @click="chooseBlock(item.exampleValue, 'partner')" v-for="(item, index) in objectList" :key="index">{{ item.exampleValue }}</view>
       </view>
       <view class="block-dash-line">
         <view class="line-main"></view>
@@ -32,7 +32,7 @@
         <input v-model="target" placeholder="填写或从下面选择，不超8个字" />
       </view>
       <view class="item-list">
-        <view class="item-block" @click="chooseBlock(item, 'target')" v-for="(item, index) in purposeList" :key="index">{{ item }}</view>
+        <view class="item-block" @click="chooseBlock(item.exampleValue, 'target')" v-for="(item, index) in purposeList" :key="index">{{ item.exampleValue }}</view>
       </view>
     </view>
     <view class="operate-block">
@@ -42,12 +42,52 @@
 </template>
 
 <script>
+  import { api } from '../../api'
 	export default {
 		data() {
 			return {
-        identityList: ['员工', '上级', '教师', '长辈', '渣男', '渣女', '下属', '学生', '吃货', '同事', '白痴', '白富美'],
-        objectList: ['员工', '家长', '教师', '长辈', '渣男', '渣女', '下属', '学生', '吃货', '同事', '白痴', '白富美'],
-        purposeList: ['表扬态度积极', '给我涨工资', '道歉', '跟他分手', '让她减肥', '炫富', '让他认真学习', '今晚去蹦迪', '为酒后吹牛找借口'],
+        identityList: [],
+        objectList: [],
+        purposeList: [],
+        tempIdentityList: [
+          {"exampleValue": "员工"},
+          {"exampleValue": "上级"},
+          {"exampleValue": "教师"},
+          {"exampleValue": "长辈"},
+          {"exampleValue": "渣男"},
+          {"exampleValue": "渣女"},
+          {"exampleValue": "下属"},
+          {"exampleValue": "学生"},
+          {"exampleValue": "吃货"},
+          {"exampleValue": "同事"},
+          {"exampleValue": "白痴"},
+          {"exampleValue": "白富美"}
+        ],
+        tempObjectList: [
+          {"exampleValue": "员工"},
+          {"exampleValue": "家长"},
+          {"exampleValue": "教师"},
+          {"exampleValue": "长辈"},
+          {"exampleValue": "渣男"},
+          {"exampleValue": "渣女"},
+          {"exampleValue": "下属"},
+          {"exampleValue": "学生"},
+          {"exampleValue": "吃货"},
+          {"exampleValue": "同事"},
+          {"exampleValue": "白痴"},
+          {"exampleValue": "白富美"}
+        ],
+        tempPurposeList: [
+          {"exampleValue": "表扬态度积极"},
+          {"exampleValue": "给我涨工资"},
+          {"exampleValue": "道歉"},
+          {"exampleValue": "跟他分手"},
+          {"exampleValue": "让她减肥"},
+          {"exampleValue": "炫富"},
+          {"exampleValue": "让他认真学习"},
+          {"exampleValue": "今晚去蹦迪"},
+          {"exampleValue": "为酒后吹牛找借口"}
+        ],
         sceneKey: '',
         identity: '',
         partner: '',
@@ -56,8 +96,50 @@
 		},
 		onLoad(option) {
       this.sceneKey = option.key
+      this.identityList = this.tempIdentityList
+      this.objectList = this.tempObjectList
+      this.purposeList = this.tempPurposeList
+      this.getSencesExamplesSearch1()
+      this.getSencesExamplesSearch2()
+      this.getSencesExamplesSearch3()
 		},
 		methods: {
+      getSencesExamplesSearch1 () {
+       api.getSencesExamplesSearch({
+          sceneKey: this.sceneKey,
+          fieldName: "identity"
+        }).then(res => {
+          if (res.code === 'SUCCESS' && res.data && res.data.length) {
+            this.identityList = res.data
+          } else {
+            this.identityList = this.tempIdentityList
+          }
+        })
+      },
+      getSencesExamplesSearch2 () {
+       api.getSencesExamplesSearch({
+          sceneKey: this.sceneKey,
+          fieldName: "partner"
+        }).then(res => {
+          if (res.code === 'SUCCESS' && res.data && res.data.length) {
+            this.objectList = res.data
+          } else {
+            this.objectList = this.tempObjectList
+          }
+        })
+      },
+      getSencesExamplesSearch3 () {
+       api.getSencesExamplesSearch({
+          sceneKey: this.sceneKey,
+          fieldName: "target"
+        }).then(res => {
+          if (res.code === 'SUCCESS' && res.data && res.data.length) {
+            this.purposeList = res.data
+          } else {
+            this.purposeList = this.tempPurposeList
+          }
+        })
+      },
       chooseBlock (name, key) {
         this[key] = name
       },

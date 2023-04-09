@@ -8,9 +8,7 @@
         <input v-model="title" placeholder="题目描述越完整，结果越好。不超过15个字" />
       </view>
       <view class="tips-left">
-        <view class="input-tips">例1：公司团建怎么搞</view>
-        <view class="input-tips">例2：小学生编程比赛</view>
-        <view class="input-tips">例3：社区公益活动方案</view>
+        <view class="input-tips" v-for="(item, index) in tipList" :key="index">例{{ index + 1 }}：{{ item.exampleValue }}</view>
       </view>
     </view>
     <view class="block-sub-view">
@@ -32,18 +30,41 @@
 </template>
 
 <script>
+  import { api } from '../../api'
 	export default {
 		data() {
 			return {
         sceneKey: '',
         title: '',
-        field: ''
+        field: '',
+        tempTipList: [{
+          exampleValue: '公司团建怎么搞'
+        }, {
+          exampleValue: '小学生编程比赛'
+        }, {
+          exampleValue: '社区公益活动方案'
+        }],
+        tipList: []
 			}
 		},
 		onLoad(option) {
       this.sceneKey = option.key
+      this.tipList = this.tempTipList
+      this.getSencesExamplesSearch()
 		},
 		methods: {
+      getSencesExamplesSearch () {
+       api.getSencesExamplesSearch({
+          sceneKey: this.sceneKey,
+          fieldName: "title"
+        }).then(res => {
+          if (res.code === 'SUCCESS' && res.data && res.data.length) {
+            this.tipList = res.data
+          } else {
+            this.tipList = this.tempTipList
+          }
+        })
+      },
       submit () {
         if (this.title && this.title.length > 15) {
           uni.showToast({
@@ -66,27 +87,20 @@
           })
           return false
         }
-        uni.showModal({
-          title: '提示',
-          content: '每篇论文消耗2个(原价4个)使用次数。是否继续',
-        }).then(res => {
-          if (res.confirm) {
-            const query = {
-              sceneKey: this.sceneKey,
-              fields: [{
-                name: 'field',
-                inputType: 'SENTENCE',
-                values: [this.field]
-              }, {
-                name: 'title',
-                inputType: 'SENTENCE',
-                values: [this.title]
-              }],
-            }
-            uni.navigateTo({
-              url: `/pages/plan/plan?query=${encodeURIComponent(JSON.stringify(query))}`
-            })
-          }
+        const query = {
+          sceneKey: this.sceneKey,
+          fields: [{
+            name: 'field',
+            inputType: 'SENTENCE',
+            values: [this.field]
+          }, {
+            name: 'title',
+            inputType: 'SENTENCE',
+            values: [this.title]
+          }],
+        }
+        uni.navigateTo({
+          url: `/pages/plan/plan?query=${encodeURIComponent(JSON.stringify(query))}`
         })
       }
 		}

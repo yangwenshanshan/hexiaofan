@@ -11,4 +11,6 @@ export const api = {
   updatePhoneByWxMiniApp: (params) => http.post(`/user/updatePhoneByWxMiniApp`, params),
   postPayWechat: (params) => http.post(`/pay/wechat`, params),
   getSubscriptions: (params) => http.get(`/subscriptions`, params),
+  getSencesCosts: (params) => http.get(`/scenes/costs`, params),
+  getSencesExamplesSearch: (params) => http.get(`/scenes/examples/search`, params),
 }
