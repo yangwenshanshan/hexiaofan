@@ -12,7 +12,10 @@
 				<image class="item-icon" src="../../static/image/icon_count.png" mode="aspectFit"></image>
 				<text class="operate-text">剩余次数</text>
 				<text class="operate-number">{{ data && data.totalQuota ? data.totalQuota : 0 }}</text>
-				<view class="add-count-btn" @click="goIncrease">增加次数</view>
+				<view class="operate-hand">
+					<image src="../../static/image/hand.png" mode="aspectFill"></image>
+				</view>
+				<view class="add-count-btn" @click="goIncrease"> {{ userInfo && !userInfo.hasPhoneNumber ? '免费增加次数' : '增加次数' }} </view>
 			</view>
 			<view class="operate-item" @click="goContactUs">
 				<image class="item-icon" src="../../static/image/icon_contact.png" mode="aspectFit"></image>
@@ -225,6 +228,12 @@
 				font-weight: bold;
 				margin-left: 40rpx;
 				flex: 1;
+			}
+			.operate-hand{
+				image{
+					width: 80rpx;
+					height: 80rpx;
+				}
 			}
 			.add-count-btn{
 				color: #fff;
