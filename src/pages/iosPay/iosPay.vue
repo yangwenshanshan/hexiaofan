@@ -1,8 +1,8 @@
 <template>
 	<view class="increase-page">
 		<view class="increase-text" v-if="isIOS">
-			<view class="text-main">由于苹果系统对虚拟商品的限制</view>
-			<view class="text-main">需要您添加客服微信来增加次数</view>
+			<view class="text-main">由于苹果(iOS)系统的限制</view>
+			<view class="text-main text-green">请联系客服完成充值</view>
 		</view>
 		<view class="discount-main" v-else>
 			<view class="discount-item item-weight">请选择套餐</view>
@@ -40,17 +40,17 @@
 	export default {
 		data() {
 			return {
-				isIOS: false,
+				isIOS: true,
 				list: [],
 				currentValue: ''
 			}
 		},
 		onLoad() {
-			uni.getSystemInfo({
-				success: (res) => {
-					this.isIOS = res.platform === 'ios'
-				}
-			})
+			// uni.getSystemInfo({
+			// 	success: (res) => {
+			// 		this.isIOS = res.platform === 'ios'
+			// 	}
+			// })
 			this.getSubscriptions()
 		},
 		methods: {
@@ -179,6 +179,12 @@
 			font-size: 40rpx;
 			line-height: 1.5;
 			text-shadow: 0 10rpx 6rpx $uni-color-theme;
+		}
+		.text-green{
+			color: rgb(40, 92, 25);
+			text-shadow: none;
+			font-weight: bold;
+			margin-top: 10rpx;
 		}
 	}
 	.discount-main{

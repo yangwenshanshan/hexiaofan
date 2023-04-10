@@ -92,11 +92,12 @@ $btn-color: #A4C0AE, #D3DBD1, #BDC4AE, #B5C4B1,  #C3DBCD, #AAB4A8, #B6CDB8, #B3C
 .sub-home-page{
   background: $uni-bg-color-grey;
   height: calc(100vh - 120rpx);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
   overflow: auto;
   .content-list{
+		padding-top: 140rpx;
     display: flex;
     flex-wrap: wrap;
     // padding-top: 40rpx;
