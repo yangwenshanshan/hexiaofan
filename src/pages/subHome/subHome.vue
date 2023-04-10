@@ -1,7 +1,7 @@
 <template>
   <view class="sub-home-page" :style="'height:' + homePageHeight">
     <view class="content-list">
-      <view class="content-item" :style="'margin-bottom:' + marginBottom" @click="goSubPage(item)" v-for="(item, index) in titeList" :key="item.index">
+      <view class="content-item" :style="'margin-bottom:' + marginBottom" @click="goSubPage(item)" v-for="(item, index) in titeList" :key="index">
         <view class="block-item" :class="'item-style-' + (index + 1)">
           <view class="item-title" v-html="item.title"></view>
         </view>
