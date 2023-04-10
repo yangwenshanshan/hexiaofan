@@ -1,8 +1,8 @@
 <template>
   <view class="sub-home-page" :style="'height:' + homePageHeight">
     <view class="content-list">
-      <view class="content-item" :style="'margin-bottom:' + marginBottom" @click="goSubPage(item)" v-for="item in titeList" :key="item.index">
-        <view class="block-item" :class="'item-style-' + item.index">
+      <view class="content-item" :style="'margin-bottom:' + marginBottom" @click="goSubPage(item)" v-for="(item, index) in titeList" :key="item.index">
+        <view class="block-item" :class="'item-style-' + (index + 1)">
           <view class="item-title" v-html="item.title"></view>
         </view>
       </view>
@@ -88,7 +88,7 @@
 </script>
 
 <style lang="scss">
-$btn-color: #A4C0AE, #D3DBD1, #BDC4AE, #B5C4B1,  #C3DBCD, #AAB4A8, #B6CDB8, #B3CDC6;
+$btn-color: #A4C0AE, #D3DBD1, #BDC4AE, #B5C4B1,  #C3DBCD, #AAB4A8, #B6CDB8, #97EEE0;
 .sub-home-page{
   background: $uni-bg-color-grey;
   height: calc(100vh - 120rpx);
@@ -108,7 +108,7 @@ $btn-color: #A4C0AE, #D3DBD1, #BDC4AE, #B5C4B1,  #C3DBCD, #AAB4A8, #B6CDB8, #B3C
       .block-item{
         width: 270rpx;
         height: 176rpx;
-        border-radius: 40rpx;
+        border-radius: 80rpx;
         font-size: 48rpx;
         color: $uni-text-color;
         display: flex;

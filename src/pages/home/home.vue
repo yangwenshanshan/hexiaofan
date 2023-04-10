@@ -316,7 +316,7 @@
 </script>
 
 <style lang="scss">
-$btn-color: #A4C0AE, #D3DBD1, #BDC4AE, #B5C4B1,  #C3DBCD, #AAB4A8, #B6CDB8, #B3CDC6;
+$btn-color: #A4C0AE, #D0DBCE, #BDC4AE, #B5C4B1,  #C3DBCD, #B3CDC6, #B6CDB8, #B3CDC6;
 .index-page{
 	.home-page{
 		background: $uni-bg-color-grey;
