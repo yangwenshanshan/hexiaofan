@@ -94,7 +94,7 @@
             values: [this.radioId]
           }, {
             name: 'focus',
-            inputType: 'RADIO',
+            inputType: 'CHECK',
             values: this.checkIds
           }],
         }

@@ -73,6 +73,7 @@
 			font-size: 28rpx;
 			padding: 20rpx;
 			line-height: 1.3;
+			border: none;
 		}
 		.textarea-tip{
 			text-align: right;
