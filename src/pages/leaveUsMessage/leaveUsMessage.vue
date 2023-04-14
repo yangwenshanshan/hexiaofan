@@ -74,6 +74,7 @@
 			padding: 20rpx;
 			line-height: 1.3;
 			border: none;
+			text-align: left;
 		}
 		.textarea-tip{
 			text-align: right;

@@ -55,8 +55,8 @@
           name: '婉约隽永'
         }],
         radioList: [{
-          value: '文言文',
-          name: '文言文'
+          value: '武侠风格',
+          name: '武侠风格'
         }, {
           value: '散文体',
           name: '散文体'
@@ -72,6 +72,12 @@
         }, {
           value: '营销风格',
           name: '营销风格'
+        }, {
+          value: '阴阳怪气风格',
+          name: '阴阳怪气风格'
+        }, {
+          value: '骂骂咧咧风格',
+          name: '骂骂咧咧风格'
         }],
         sceneKey: '',
         expression: '',
