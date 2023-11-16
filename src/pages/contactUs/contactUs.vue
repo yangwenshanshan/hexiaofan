@@ -7,7 +7,7 @@
 			</view>
 		</view>
 		<view class="plan-title">客服微信号</view>
-		<view class="plan-wechat">lanhekeji007</view>
+		<view class="plan-wechat">LearingIsTheWay</view>
 		<view class="copy-btn">
 			<view class="btn-main" @click="copy">点击复制</view>
 			<view class="btn-tip">复制后，在微信联系人里添加客服</view>
@@ -26,7 +26,7 @@
 		methods: {
 			copy () {
 				uni.setClipboardData({
-					data: 'lanhekeji007'
+					data: 'LearingIsTheWay'
 				})
 			}
 		},

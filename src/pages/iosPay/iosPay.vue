@@ -27,7 +27,7 @@
 			</view>
 		</view>
 		<view class="increase-title">客服微信号</view>
-		<view class="increase-wechat">lanhekeji007</view>
+		<view class="increase-wechat">LearingIsTheWay</view>
 		<view class="copy-btn">
 			<view class="btn-main" @click="copy">点击复制</view>
 			<view class="btn-tip">复制后，在微信联系人里添加客服</view>
@@ -104,7 +104,7 @@
 			},
 			copy () {
 				uni.setClipboardData({
-					data: 'lanhekeji007'
+					data: 'LearingIsTheWay'
 				})
 			},
 			radioChange (e) {
