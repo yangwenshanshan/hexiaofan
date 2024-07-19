@@ -2,13 +2,35 @@
 	<view class="index-page">
 		<view class="home-page" v-if="type === 'home'" :style="'height:' + homePageHeight">
 			<view class="content-list">
-				<view class="content-item" :style="'margin-bottom:' + marginBottom" @click="goSubPage(item)" v-for="item in titeList" :key="item.index">
+				<!-- :style="'margin-bottom:' + marginBottom" -->
+				<view class="content-item" @click="goSubPage(item)" v-for="item in titeList" :key="item.index">
 					<view class="block-item" :class="'item-style-' + item.index">
 						<view class="item-title">{{ item.title }}</view>
+						<view class="item-sub_title">{{ item.sub_title }}</view>
 					</view>
 				</view>
-				<view class="btn-more">
-					<view class="more-main" @click="goContactUs">我有更多需求</view>
+				<view class="home-line">
+					<view class="home-line-tips">
+						<view class="tip-main">
+							<view class="main-content">
+								<image class="tip-hand tip-hand-top" src="../../static/image/hand.png"></image>
+								<text>快捷模板</text>
+							</view>
+							<view class="main-content">
+								<image class="tip-hand tip-hand-bottom" src="../../static/image/hand.png"></image>
+								<text>自由对话</text>
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="dialogue">
+					<textarea v-model="textareaValue" maxlength="10000" placeholder="输入你想要说的话"></textarea>
+					<view class="word-list">
+						<view class="word-item" v-for="(item, index) in words" :key="index" @click="goFreeDialogueShortCut(item.content)">{{ item.content }}</view>
+					</view>
+				</view>
+				<view class="home-btn-list">
+					<view class="home-btn-item" @click="goFreeDialogue">开始</view>
 				</view>
 			</view>
 		</view>
@@ -39,12 +61,6 @@
 					<text class="operate-text">给我们留言</text>
 				</view>
 				<view class="operate-tips" :style="'height:' + tipsHeight">
-					<view>你不懂我。</view>
-					<view>因为我是迷雾中的一朵花，</view>
-					<view>像一片清晨的浅绿，细腻而柔美。</view>
-					<view>在日月轮回的呼吸中凝视，</view>
-					<view>那些风景，那些故事，</view>
-					<view>静静流淌...</view>
 				</view>
 			</view>
 
@@ -88,6 +104,7 @@
 	export default {
 		data() {
 			return {
+				textareaValue: '',
 				homePageHeight: '100vh',
 				tabHeight: '120rpx',
 				bottomHeight: 0,
@@ -99,37 +116,43 @@
 				maskVisible: false,
 				userInfo: null,
 				type: 'home',
-
+				words: [{
+					content: '安慰朋友的消息',
+				}, {
+					content: '挑选一件上镜的服装',
+				}, {
+					content: '考考我世界首都知识',
+				}, {
+					content: '像本地人一样浏览首尔',
+				}, {
+					content: '蓝牙耳机坏了，是挂牙科还是耳科',
+				}, {
+					content: '我想解梦',
+				}],
 				titeList: [{
 					index: 1,
 					key: '',
 					en_title: 'subHome',
-					title: '教学专区'
-				}, {
-					index: 2,
-					key: 'TSC56',
-					en_title: 'rescueTheSocialTerror',
-					title: '拯救社恐'
+					title: '幼儿教育',
+					sub_title: '写招生活动方案、教案、游戏、故事等'
 				}, {
 					index: 3,
 					key: 'TSC09',
 					en_title: 'contentGeneration',
-					title: '内容生成'
-				}, {
-					index: 4,
-					key: 'TSC10',
-					en_title: 'runColorRewriting',
-					title: '润色改写'
+					title: '写篇文章',
+					sub_title: '编写各类风格的文章、诗词、营销文案等'
 				}, {
 					index: 5,
 					key: 'TSC11',
 					en_title: 'originalPapers',
-					title: '原创论文'
+					title: '创作论文',
+					sub_title: '根据您的要求撰写论文'
 				}, {
 					index: 6,
 					key: 'TSC12',
 					en_title: 'programPlanning',
-					title: '方案策划'
+					title: '活动方案',
+					sub_title: '策划活动方案，如团建、出游、比赛等'
 				}]
 			}
 		},
@@ -161,6 +184,26 @@
 			})
 		},
 		methods: {
+			goFreeDialogue () {
+				if (!this.textareaValue) {
+					uni.showToast({
+            icon: 'none',
+            title: '请输入你想要说的话'
+          })
+					return
+				}
+				uni.navigateTo({
+					url: `/pages/freeDialogue/freeDialogue?value=${this.textareaValue}`
+				})
+				setTimeout(() => {
+					this.textareaValue = ''
+				}, 300)
+			},
+			goFreeDialogueShortCut (content) {
+				uni.navigateTo({
+					url: `/pages/freeDialogue/freeDialogue?value=${content}`
+				})
+			},
 			mineFun () {
 				this.getCode()
 				this.getQuotaRemaining()
@@ -324,32 +367,23 @@ $btn-color: #A4C0AE, #D0DBCE, #BDC4AE, #B5C4B1,  #C3DBCD, #B3CDC6, #B6CDB8, #B3C
 	.home-page{
 		background: $uni-bg-color-grey;
 		height: calc(100vh - 120rpx);
-		display: flex;
-		align-items: center;
-		justify-content: center;
 		overflow: auto;
 		.content-list{
-			display: flex;
-			flex-wrap: wrap;
-			// padding-top: 40rpx;
+			padding: 40rpx;
 			.content-item{
-				width: 375rpx;
-				display: flex;
-				justify-content: center;
 				.block-item{
-					width: 260rpx;
-					height: 176rpx;
 					border-radius: 20rpx;
-					font-size: 48rpx;
-					color: $uni-text-color;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					box-shadow: 0 4rpx 6rpx #748C7C;
+					padding: 20rpx;
+					margin-bottom: 20rpx;
+					box-shadow: 0 5rpx 10rpx 2rpx #748C7C;
 					.item-title{
-						width: 120rpx;
+						font-size: 36rpx;
 						letter-spacing: 10rpx;
 						font-weight: bold;
+					}
+					.item-sub_title{
+						font-size: 28rpx;
+						margin-top: 10rpx;
 					}
 				}
 				@each $item in $btn-color{
@@ -357,6 +391,86 @@ $btn-color: #A4C0AE, #D0DBCE, #BDC4AE, #B5C4B1,  #C3DBCD, #B3CDC6, #B6CDB8, #B3C
 					.item-style-#{$index}{
 						background: $item;
 					}
+				}
+			}
+			.dialogue{
+				textarea{
+					height: 140rpx;
+					text-align: left;
+					margin-bottom: 20rpx;
+				}
+				.word-list{
+					display: flex;
+					flex-wrap: wrap;
+					.word-item{
+						padding: 0 20rpx;
+						background: #fff;
+						border: 2rpx solid #ccc;
+						border-radius: 60rpx;
+						height: 60rpx;
+						margin-right: 20rpx;
+						font-size: 28rpx;
+						margin-bottom: 10rpx;
+						display: flex;
+						align-items: center;
+					}
+				}
+			}
+			.home-line{
+				.home-line-tips{
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					&::before{
+						content: ' ';
+						display: block;
+						height: 1rpx;
+						background: #ccc;
+						flex: 1;
+					}
+					&::after{
+						content: ' ';
+						display: block;
+						height: 1rpx;
+						background: #ccc;
+						flex: 1;
+					}
+					.tip-main{
+						margin: 20rpx 0 30rpx 0;
+						.main-content{
+							display: flex;
+							align-items: center;
+						}
+						.tip-hand{
+							width: 45rpx;
+							height: 45rpx;
+						}
+						.tip-hand-bottom{
+							transform: rotate(90deg);
+						}
+						.tip-hand-top{
+							transform: rotate(-90deg);
+						}
+					}
+				}
+			}
+			.home-btn-list{
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding-top: 20rpx;
+				.home-btn-item{
+					height: 60rpx;
+					background: #E0722B;
+					font-weight: bold;
+					color: #f0f0f0;
+					border-radius: 10rpx;
+					text-align: center;
+					display: flex;
+					align-items: center;
+					padding: 0 60rpx;
+					border-radius: 60rpx;
+					font-size: 36rpx;
 				}
 			}
 			.btn-more{

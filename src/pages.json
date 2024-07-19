@@ -69,7 +69,7 @@
 		{
 			"path": "pages/plan/plan",
 			"style": {
-				"navigationBarTitleText": "生成方案"
+				"navigationBarTitleText": "内容生成"
 			}
 		},
 		{
@@ -130,6 +130,12 @@
 			"path": "pages/iosPay/iosPay",
 			"style": {
 				"navigationBarTitleText": "增加次数"
+			}
+		},
+		{
+			"path": "pages/freeDialogue/freeDialogue",
+			"style": {
+				"navigationBarTitleText": "自由对话"
 			}
 		}
 	],

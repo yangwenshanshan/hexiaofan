@@ -46,16 +46,6 @@
 					key: 'TSC08',
 					en_title: 'trainingProgram',
 					title: '培训方案'
-				}, {
-					index: 7,
-					key: 'TSC07',
-					en_title: 'englishScene',
-					title: '英文场景'
-				}, {
-					index: 9,
-					key: '',
-					en_title: 'contactUs',
-					title: '招生</br>1对1'
 				}]
 				// {
 				// 	index: 6,
